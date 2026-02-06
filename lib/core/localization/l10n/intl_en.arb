@@ -1,0 +1,85 @@
+{
+  "@@locale": "en",
+  "appName": "ShopEasy",
+  "@appName": {
+    "description": "The name of the application"
+  },
+  
+
+  "home": "Home",
+  "categories": "Categories",
+  "cart": "Cart",
+  "profile": "Profile",
+  "wishlist": "Wishlist",
+  "letsStart": "Let's get started!",
+  "alreadyAcc": "Already have an account?",
+  "email": "Email",
+  "password": "Password",
+  "name": "Name",
+  "cancel": "Cancel",
+  "typePassword": "Type your password",
+  "done": "Done",
+  "createAcc": "Create \nAccount",
+  "phoneNumber": "Phone number",
+  
+
+  "searchProducts": "Search products...",
+  "featuredProducts": "Featured Products",
+  "topCategories": "Top Categories",
+  "specialOffers": "Special Offers",
+  "viewAll": "View All",
+  
+
+  "addToCart": "Add to Cart",
+  "buyNow": "Buy Now",
+  "inStock": "In Stock",
+  "outOfStock": "Out of Stock",
+  "reviews": "{count, plural, =0{No Reviews} =1{1 Review} other{{count} Reviews}}",
+  "itemsLeft": "{count, plural, =0{Out of stock} =1{1 item left} other{{count} items left}}",
+  
+
+  "yourCart": "Your Cart",
+  "emptyCart": "Your cart is empty",
+  "startShopping": "Start Shopping",
+  "subtotal": "Subtotal",
+  "shipping": "Shipping",
+  "tax": "Tax",
+  "total": "Total",
+  "checkout": "Checkout",
+  "remove": "Remove",
+  
+
+  "shippingAddress": "Shipping Address",
+  "paymentMethod": "Payment Method",
+  "orderSummary": "Order Summary",
+  "placeOrder": "Place Order",
+  
+
+  "myOrders": "My Orders",
+  "settings": "Settings",
+  "helpCenter": "Help Center",
+  "logout": "Logout",
+  "login": "Login",
+  "signup": "Sign Up",
+  
+
+  "addedToCart": "{product} added to cart",
+  "removedFromCart": "{product} removed from cart",
+  "addedToWishlist": "Added to wishlist",
+  "orderPlaced": "Order placed successfully!",
+  
+
+  "errorOccurred": "An error occurred",
+  "tryAgain": "Try Again",
+  "noInternet": "No internet connection",
+  
+
+  "success": "Success",
+  "saved": "Saved",
+  
+
+  "justNow": "Just now",
+  "minutesAgo": "{count} minutes ago",
+  "hoursAgo": "{count} hours ago",
+  "daysAgo": "{count} days ago"
+}
