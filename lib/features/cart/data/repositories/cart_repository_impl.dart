@@ -33,6 +33,11 @@ class CartRepositoryImpl implements CartRepository{
   }
 
   @override
+  Future<void> updateQuantity(String productId, String quantity) async {
+    return dataSource.updateQuantity(productId, quantity);
+  }
+
+  @override
   Future<void> clearCart() async {
     return dataSource.clearCart();
   }

@@ -7,7 +7,6 @@ import 'package:shop_project/core/di/service_locator.dart';
 import 'package:shop_project/core/navigation/app_router.dart';
 import 'package:shop_project/features/product/domain/entities/product_entity.dart';
 import 'package:shop_project/features/product/domain/usecases/get_product_use_case.dart';
-import 'package:shop_project/features/product/presentation/bloc/product_detail_bloc.dart';
 import 'package:shop_project/features/product/presentation/bloc/product_list_bloc.dart';
 import 'package:shop_project/features/product/presentation/bloc/product_list_event.dart';
 import 'package:shop_project/features/product/presentation/cubit/selected_product_cubit.dart';

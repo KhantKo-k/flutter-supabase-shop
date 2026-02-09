@@ -15,7 +15,17 @@ class ProductDetailPage extends StatefulWidget {
   State<ProductDetailPage> createState() => _ProductDetailPageState();
 }
 class _ProductDetailPageState extends State<ProductDetailPage>{
-  int localQuantity = 1;
+  late int _localQuantity;
+
+  @override
+  void initState() {
+    super.initState();
+    final int productId = context.read<CartBloc>().state.items.indexWhere(
+      (item) => item.productId == widget.product.id
+    );
+    final product = context.read<CartBloc>().state.items[productId];
+    _localQuantity = product.quantity;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +36,7 @@ class _ProductDetailPageState extends State<ProductDetailPage>{
         );
         final bool isInCart = cartItemIdex != -1;
         
-        final int displayQuantity = isInCart
-          ? state.items[cartItemIdex].quantity
-          : localQuantity;
+        
 
         return Scaffold(
           appBar: AppBar(title: Text('Product Details'), elevation: 0),
@@ -40,7 +48,7 @@ class _ProductDetailPageState extends State<ProductDetailPage>{
                   children: [
                     _buildProductImage(widget.product.imageUrl, context),
                     _buildProductInfo(widget.product),
-                    _buildQuantitySelector(isInCart, displayQuantity, context),
+                    _buildQuantitySelector(isInCart, _localQuantity, context),
                     SizedBox(height: 100),
                   ],
                 ),
@@ -48,7 +56,7 @@ class _ProductDetailPageState extends State<ProductDetailPage>{
               Align(
                 alignment: Alignment.bottomCenter,
                 child: !isInCart ?
-                _buildBottomBar(isInCart, displayQuantity, context)
+                _buildBottomBar(isInCart, _localQuantity, context)
                 : SizedBox.shrink(),
               ),
             ],
@@ -153,7 +161,7 @@ class _ProductDetailPageState extends State<ProductDetailPage>{
                 context.read<CartBloc>().add(DecreaseQuantity(productId: widget.product.id));
               } else {
                 // Control local state
-                if (localQuantity > 1) setState(() => localQuantity--);
+                if (_localQuantity > 1) setState(() => _localQuantity--);
               }
             }),
             Padding(
@@ -172,7 +180,7 @@ class _ProductDetailPageState extends State<ProductDetailPage>{
                 context.read<CartBloc>().add(IncreaseQuantity(productId: widget.product.id));
               } else {
                 // Control local state
-                setState(() => localQuantity++);
+                setState(() => _localQuantity++);
               }
             }),
             VerticalDivider(),

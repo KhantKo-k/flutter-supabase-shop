@@ -28,3 +28,9 @@ class DecreaseQuantity extends CartEvent{
   DecreaseQuantity({required this.productId});
 }
 
+class UpdateQuantity extends CartEvent{
+  final String quantity;
+
+  UpdateQuantity({required this.quantity});
+}
+
