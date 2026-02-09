@@ -9,6 +9,7 @@ import 'package:shop_project/core/navigation/app_router.dart';
 import 'package:shop_project/core/theme/theme_cubit.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.dart';
 import 'package:shop_project/features/auth/presentation/email/bloc/email_bloc.dart';
+import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:shop_project/features/product/presentation/cubit/selected_product_cubit.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => serviceLocator.get<AuthBloc>()),
         BlocProvider(create: (context) => serviceLocator.get<EmailBloc>()),
+        BlocProvider(create: (context) => serviceLocator.get<CartBloc>()),
         BlocProvider(create: (context) => SelectedProductCubit()),
         BlocProvider(create: (context) => ThemeCubit()),
       ],

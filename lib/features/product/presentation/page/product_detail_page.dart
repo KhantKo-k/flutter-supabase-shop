@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/core/common_widgets/category_chip.dart';
+import 'package:shop_project/features/cart/domain/entities/cart_item.dart';
+import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:shop_project/features/cart/presentation/bloc/cart_event.dart';
 import 'package:shop_project/features/product/domain/entities/product_entity.dart';
 import 'package:shop_project/features/product/presentation/bloc/product_detail_bloc.dart';
 import 'package:shop_project/features/product/presentation/bloc/product_detail_event.dart';
@@ -14,12 +17,7 @@ class ProductDetailPage extends StatelessWidget {
     return BlocBuilder<ProductDetailBloc, ProductDetailState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'Product Details',            
-            ),       
-            elevation: 0,
-          ),
+          appBar: AppBar(title: Text('Product Details'), elevation: 0),
           body: Stack(
             children: [
               SingleChildScrollView(
@@ -29,13 +27,13 @@ class ProductDetailPage extends StatelessWidget {
                     _buildProductImage(state.product.imageUrl, context),
                     _buildProductInfo(state.product),
                     _buildQuantitySelector(state, context),
-                    SizedBox(height: 100,)
+                    SizedBox(height: 100),
                   ],
                 ),
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: _buildBottomBar(state),
+                child: _buildBottomBar(state, context),
               ),
             ],
           ),
@@ -110,10 +108,7 @@ class ProductDetailPage extends StatelessWidget {
             opacity: 0.5,
             child: Text(
               product.description,
-              style: TextStyle(
-                fontSize: 16,
-                height: 1.5, 
-              ),
+              style: TextStyle(fontSize: 16, height: 1.5),
             ),
           ),
         ],
@@ -187,7 +182,7 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomBar(ProductDetailState state) {
+  Widget _buildBottomBar(ProductDetailState state, BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -201,7 +196,19 @@ class ProductDetailPage extends StatelessWidget {
         children: [
           Expanded(
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                context.read<CartBloc>().add(
+                  AddItem(
+                    item: CartItem(
+                      productId: state.product.id,
+                      name: state.product.name,
+                      imageUrl: state.product.imageUrl,
+                      price: state.product.price,
+                      quantity: state.quantity,
+                    ),
+                  ),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 18),
                 shape: RoundedRectangleBorder(

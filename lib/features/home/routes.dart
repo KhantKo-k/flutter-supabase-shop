@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shop_project/features/cart/routes.dart';
 import 'package:shop_project/features/home/presentation/home_page.dart';
 import 'package:shop_project/features/home/presentation/splash_screen.dart';
 import 'package:shop_project/features/product/routes.dart';
@@ -12,7 +13,7 @@ class HomeRoutes {
   static const splash = '/';
   static const home = ProductRoutes.products;
   static const profile = '/profile';
-  static const cart = '/cart';
+  static const cart = CartRoutes.cart;
 
   static final routes = [
     GoRoute(path: splash, builder: (context, state) => const SplashScreen()),
@@ -25,15 +26,17 @@ class HomeRoutes {
           navigatorKey: _homeNavigatorKey,
           routes: [
             ...ProductRoutes.shellRoutes,
+            
           ],
         ),
         StatefulShellBranch(
           navigatorKey: _cartNavigatorKey,
           routes: [
-            GoRoute(
-              path: cart,
-              builder: (context, state) => const ChildPage(pageName: 'Cart'),
-            ),
+            ...CartRoutes.shellroutes,
+            // GoRoute(
+            //   path: cart,
+            //   builder: (context, state) => const ChildPage(pageName: 'Cart'),
+            // ),
           ],
         ),
         StatefulShellBranch(
