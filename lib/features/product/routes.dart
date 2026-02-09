@@ -42,11 +42,13 @@ class ProductRoutes {
       );
     }
 
-    return BlocProvider(
-      key: ValueKey(product.id),
-      create: (_) => ProductDetailBloc(product: product),
-      child: const ProductDetailPage(),
-    );
+    return ProductDetailPage(product: product);
+
+    // return BlocProvider(
+    //   key: ValueKey(product.id),
+    //   create: (_) => ProductDetailBloc(product: product),
+    //   child: const ProductDetailPage(),
+    // );
   },
 )
 

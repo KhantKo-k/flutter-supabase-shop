@@ -4,18 +4,32 @@ import 'package:shop_project/core/common_widgets/category_chip.dart';
 import 'package:shop_project/features/cart/domain/entities/cart_item.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_event.dart';
+import 'package:shop_project/features/cart/presentation/bloc/cart_state.dart';
 import 'package:shop_project/features/product/domain/entities/product_entity.dart';
-import 'package:shop_project/features/product/presentation/bloc/product_detail_bloc.dart';
-import 'package:shop_project/features/product/presentation/bloc/product_detail_event.dart';
-import 'package:shop_project/features/product/presentation/bloc/product_detail_state.dart';
 
-class ProductDetailPage extends StatelessWidget {
-  const ProductDetailPage({super.key});
+class ProductDetailPage extends StatefulWidget {
+  final Product product;
+  const ProductDetailPage({super.key, required this.product});
+
+  @override
+  State<ProductDetailPage> createState() => _ProductDetailPageState();
+}
+class _ProductDetailPageState extends State<ProductDetailPage>{
+  int localQuantity = 1;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProductDetailBloc, ProductDetailState>(
+    return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
+        final cartItemIdex = state.items.indexWhere(
+          (item) => item.productId == widget.product.id,
+        );
+        final bool isInCart = cartItemIdex != -1;
+        
+        final int displayQuantity = isInCart
+          ? state.items[cartItemIdex].quantity
+          : localQuantity;
+
         return Scaffold(
           appBar: AppBar(title: Text('Product Details'), elevation: 0),
           body: Stack(
@@ -24,16 +38,18 @@ class ProductDetailPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildProductImage(state.product.imageUrl, context),
-                    _buildProductInfo(state.product),
-                    _buildQuantitySelector(state, context),
+                    _buildProductImage(widget.product.imageUrl, context),
+                    _buildProductInfo(widget.product),
+                    _buildQuantitySelector(isInCart, displayQuantity, context),
                     SizedBox(height: 100),
                   ],
                 ),
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: _buildBottomBar(state, context),
+                child: !isInCart ?
+                _buildBottomBar(isInCart, displayQuantity, context)
+                : SizedBox.shrink(),
               ),
             ],
           ),
@@ -117,7 +133,8 @@ class ProductDetailPage extends StatelessWidget {
   }
 
   Widget _buildQuantitySelector(
-    ProductDetailState state,
+    bool isInCart,
+    int quantity,
     BuildContext context,
   ) {
     return Padding(
@@ -125,31 +142,39 @@ class ProductDetailPage extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          // color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.grey[200]!),
         ),
         child: Row(
-          //mainAxisSize: MainAxisSize.min,
           children: [
-            _qtyButton(
-              Icons.remove,
-              () => context.read<ProductDetailBloc>().add(QuantityDecreased()),
-            ),
+            _qtyButton(Icons.remove, () {
+              if (isInCart) {
+                // Control global CartBloc
+                context.read<CartBloc>().add(DecreaseQuantity(productId: widget.product.id));
+              } else {
+                // Control local state
+                if (localQuantity > 1) setState(() => localQuantity--);
+              }
+            }),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                '${state.quantity}',
+                '$quantity',
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            _qtyButton(
-              Icons.add,
-              () => context.read<ProductDetailBloc>().add(QuantityIncreased()),
-            ),
+            _qtyButton(Icons.add, () {
+              if (isInCart) {
+                // Control global CartBloc
+                context.read<CartBloc>().add(IncreaseQuantity(productId: widget.product.id));
+              } else {
+                // Control local state
+                setState(() => localQuantity++);
+              }
+            }),
             VerticalDivider(),
             // Spacer(),
             Column(
@@ -158,11 +183,8 @@ class ProductDetailPage extends StatelessWidget {
               children: [
                 const Text('Total Price', style: TextStyle(color: Colors.grey)),
                 Text(
-                  '\$${state.totalPrice.toStringAsFixed(2)}',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  '\$${(widget.product.price * quantity).toStringAsFixed(2)}',
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -182,7 +204,7 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomBar(ProductDetailState state, BuildContext context) {
+  Widget _buildBottomBar(bool isInCart, int quantity, BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -200,11 +222,11 @@ class ProductDetailPage extends StatelessWidget {
                 context.read<CartBloc>().add(
                   AddItem(
                     item: CartItem(
-                      productId: state.product.id,
-                      name: state.product.name,
-                      imageUrl: state.product.imageUrl,
-                      price: state.product.price,
-                      quantity: state.quantity,
+                      productId: widget.product.id,
+                      name: widget.product.name,
+                      imageUrl: widget.product.imageUrl,
+                      price: widget.product.price,
+                      quantity: quantity,
                     ),
                   ),
                 );
@@ -215,9 +237,9 @@ class ProductDetailPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              child: const Text(
+              child: Text(
                 'Add to Cart',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),

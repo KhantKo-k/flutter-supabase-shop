@@ -12,29 +12,38 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: _buildAppBar(),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state.items.isEmpty) {
-            return const Center(child: Text('Cart is empty'));
+            return _buildEmptyCart();
           }
-
           return _buildCartList(state, context);
         },
       ),
     );
   }
 
-  // AppBar _buildAppBar() {
-  //   return AppBar(title: Text('My Cart'));
-  // }
+  Widget _buildEmptyCart() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.shopping_cart_outlined, size: 80),
+          const SizedBox(height: 16),
+          const Text('Your cart is Empty'),
+        ],
+      ),
+    );
+  }
 
   Widget _buildCartList(CartState state, BuildContext context) {
     return Column(
       children: [
         Expanded(
-          child: ListView.builder(
+          child: ListView.separated(
+            padding: const EdgeInsets.all(16),
             itemCount: state.items.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 12),
             itemBuilder: (_, index) {
               final item = state.items[index];
               return _buildCartItem(item, state, context);
@@ -42,68 +51,95 @@ class CartPage extends StatelessWidget {
           ),
         ),
 
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            'Total: \$${state.totalPrice.toStringAsFixed(2)}',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ),
+        _buildCheckoutSection(state),
       ],
     );
   }
 
   Widget _buildCartItem(CartItem item, CartState state, BuildContext context) {
-    return ListTile(
-      leading: _buildImage(item.imageUrl),
-
-      title: Text(item.name),
-      subtitle: _buildQuantitySelector(item, state, context),
-      trailing: _buildDelete(context, item),
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            _buildImage(item.imageUrl),
+            SizedBox(width: 16),
+            _buildDetail(item, context),
+            _buildDelete(context, item),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _buildImage(String imageUrl) {
-    return SizedBox(
-      width: 60,
-      height: 60,
-      child: CachedNetworkImage(imageUrl: imageUrl),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: CachedNetworkImage(
+        width: 80,
+        height: 80,
+        imageUrl: imageUrl,
+        fit: BoxFit.cover,
+      ),
     );
   }
 
-  Widget _buildQuantitySelector(
-    CartItem item,
-    CartState state,
-    BuildContext context,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('\$${item.price}'),
-        Row(
-          children: [
-            IconButton(
-              onPressed: () {
-                context.read<CartBloc>().add(
-                  DecreaseQuantity(productId: item.productId),
-                );
-              },
-              icon: Icon(Icons.remove, size: 20),
-            ),
+  Widget _buildDetail(CartItem item, BuildContext context) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            item.name,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 4),
+          Text('\$${item.price}'),
+          const SizedBox(height: 8),
+          _buildQuantitySelector(item, context),
+        ],
+      ),
+    );
+  }
 
-            Text(item.quantity.toString()),
+  Widget _buildQuantitySelector(CartItem item, BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        //color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    context.read<CartBloc>().add(
+                      DecreaseQuantity(productId: item.productId),
+                    );
+                  },
+                  icon: Icon(Icons.remove, size: 20),
+                ),
 
-            IconButton(
-              onPressed: () {
-                context.read<CartBloc>().add(
-                  IncreaseQuantity(productId: item.productId),
-                );
-              },
-              icon: Icon(Icons.add, size: 20),
+                Text(item.quantity.toString()),
+
+                IconButton(
+                  onPressed: () {
+                    context.read<CartBloc>().add(
+                      IncreaseQuantity(productId: item.productId),
+                    );
+                  },
+                  icon: Icon(Icons.add, size: 20),
+                ),
+              ],
             ),
-          ],
-        ),
-      ],
+          ),
+          Text('\$${item.quantity * item.price}'),
+        ],
+      ),
     );
   }
 
@@ -112,7 +148,36 @@ class CartPage extends StatelessWidget {
       onPressed: () {
         context.read<CartBloc>().add(RemoveItem(productId: item.productId));
       },
-      icon: Icon(Icons.remove, size: 20),
+      icon: Icon(Icons.delete, size: 20),
+    );
+  }
+
+  Widget _buildCheckoutSection(CartState state) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 10),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Total', style: TextStyle(fontSize: 18)),
+              Text(
+                '\$${state.totalPrice.toStringAsFixed(2)}',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            height: 55,
+            child: ElevatedButton(
+              onPressed: () {},
+              child: const Text('Order Now'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
