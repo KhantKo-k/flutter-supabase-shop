@@ -14,29 +14,36 @@ class ProductDetailPage extends StatefulWidget {
   @override
   State<ProductDetailPage> createState() => _ProductDetailPageState();
 }
-class _ProductDetailPageState extends State<ProductDetailPage>{
+
+class _ProductDetailPageState extends State<ProductDetailPage> {
   late int _localQuantity;
 
   @override
   void initState() {
     super.initState();
-    final int productId = context.read<CartBloc>().state.items.indexWhere(
-      (item) => item.productId == widget.product.id
+    final cartState = context.read<CartBloc>().state;
+
+    final int productIndex = cartState.items.indexWhere(
+      (item) => item.productId == widget.product.id,
     );
-    final product = context.read<CartBloc>().state.items[productId];
-    _localQuantity = product.quantity;
+    if (productIndex != -1) {
+      final product = cartState.items[productIndex];
+      _localQuantity = product.quantity;
+    } else {
+      _localQuantity = 1;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
+        final isLoading = state.isLoading;
+
         final cartItemIdex = state.items.indexWhere(
           (item) => item.productId == widget.product.id,
         );
         final bool isInCart = cartItemIdex != -1;
-        
-        
 
         return Scaffold(
           appBar: AppBar(title: Text('Product Details'), elevation: 0),
@@ -55,9 +62,15 @@ class _ProductDetailPageState extends State<ProductDetailPage>{
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: !isInCart ?
-                _buildBottomBar(isInCart, _localQuantity, context)
-                : SizedBox.shrink(),
+                child:
+                    // !isInCart
+                    _buildBottomBar(
+                      isInCart,
+                      _localQuantity,
+                      context,
+                      isLoading,
+                    ),
+                // : SizedBox.shrink(),
               ),
             ],
           ),
@@ -156,18 +169,16 @@ class _ProductDetailPageState extends State<ProductDetailPage>{
         child: Row(
           children: [
             _qtyButton(Icons.remove, () {
-              if (isInCart) {
-                // Control global CartBloc
-                context.read<CartBloc>().add(DecreaseQuantity(productId: widget.product.id));
-              } else {
-                // Control local state
-                if (_localQuantity > 1) setState(() => _localQuantity--);
+              if (_localQuantity > 1) {
+                setState(() {
+                  _localQuantity--;
+                });
               }
             }),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                '$quantity',
+                '$_localQuantity',
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -175,13 +186,9 @@ class _ProductDetailPageState extends State<ProductDetailPage>{
               ),
             ),
             _qtyButton(Icons.add, () {
-              if (isInCart) {
-                // Control global CartBloc
-                context.read<CartBloc>().add(IncreaseQuantity(productId: widget.product.id));
-              } else {
-                // Control local state
-                setState(() => _localQuantity++);
-              }
+              setState(() {
+                _localQuantity++;
+              });
             }),
             VerticalDivider(),
             // Spacer(),
@@ -191,8 +198,11 @@ class _ProductDetailPageState extends State<ProductDetailPage>{
               children: [
                 const Text('Total Price', style: TextStyle(color: Colors.grey)),
                 Text(
-                  '\$${(widget.product.price * quantity).toStringAsFixed(2)}',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  '\$${(widget.product.price * _localQuantity).toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -212,11 +222,15 @@ class _ProductDetailPageState extends State<ProductDetailPage>{
     );
   }
 
-  Widget _buildBottomBar(bool isInCart, int quantity, BuildContext context) {
+  Widget _buildBottomBar(
+    bool isInCart,
+    int quantity,
+    BuildContext context,
+    bool isLoading,
+  ) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        // color: Colors.white,
         boxShadow: [
           BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 20),
         ],
@@ -226,28 +240,55 @@ class _ProductDetailPageState extends State<ProductDetailPage>{
         children: [
           Expanded(
             child: ElevatedButton(
-              onPressed: () {
-                context.read<CartBloc>().add(
-                  AddItem(
-                    item: CartItem(
-                      productId: widget.product.id,
-                      name: widget.product.name,
-                      imageUrl: widget.product.imageUrl,
-                      price: widget.product.price,
-                      quantity: quantity,
-                    ),
-                  ),
-                );
-              },
+              onPressed: isLoading
+                  ? null
+                  : () {
+                      isInCart
+                          ? context.read<CartBloc>().add(
+                              UpdateQuantity(
+                                productId: widget.product.id,
+                                quantity: quantity.toString(),
+                              ),
+                            )
+                          : context.read<CartBloc>().add(
+                              AddItem(
+                                item: CartItem(
+                                  productId: widget.product.id,
+                                  name: widget.product.name,
+                                  imageUrl: widget.product.imageUrl,
+                                  price: widget.product.price,
+                                  quantity: quantity,
+                                ),
+                              ),
+                            );
+                    },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 18),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              child: Text(
-                'Add to Cart',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Opacity(
+                    opacity: isLoading ? 0 : 1,
+                    child: Text(
+                      isInCart ? 'Update to Cart' : 'Add to Cart',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
+                  if(isLoading)
+                  const SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(strokeWidth: 3,),
+                  )
+                ],
               ),
             ),
           ),

@@ -6,6 +6,7 @@ abstract class CartLocalDataSource {
   Future<void> removeFromCart(String productId);
   Future<void> increaseQuantity(String productId);
   Future<void> decreaseQuantity(String productId);
+  Future<void> updateQuantity(String productId, String quantity);
   Future<void> clearCart();
 }
 
@@ -62,6 +63,17 @@ class CartLocalDataSourceImpl implements CartLocalDataSource{
       } else {
         _cartItems.removeAt(index);
       }
+    }
+  }
+
+  @override
+  Future<void> updateQuantity(String productId, String quantity) async {
+    final index = _cartItems.indexWhere((e) => e.productId == productId);
+
+    if(index >= 0) {
+      _cartItems[index] = _cartItems[index].copyWith(
+        int.parse(quantity)
+      );
     }
   }
 

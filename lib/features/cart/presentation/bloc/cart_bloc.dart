@@ -6,6 +6,7 @@ import 'package:shop_project/features/cart/domain/usecases/decrease_quantity_use
 import 'package:shop_project/features/cart/domain/usecases/get_cart_item_usecase.dart';
 import 'package:shop_project/features/cart/domain/usecases/increase_quantity_usecase.dart';
 import 'package:shop_project/features/cart/domain/usecases/remove_from_cart_usecase.dart';
+import 'package:shop_project/features/cart/domain/usecases/update_quantity_usecase.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_event.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_state.dart';
 
@@ -15,6 +16,7 @@ class CartBloc extends Bloc<CartEvent, CartState>{
   final RemoveFromCartUsecase removeFromCart;
   final IncreaseQuantityUsecase increaseQuantity;
   final DecreaseQuantityUsecase decreaseQuantity;
+  final UpdateQuantityUsecase updateQuantity;
 
   CartBloc({
     required this.addToCart,
@@ -22,17 +24,20 @@ class CartBloc extends Bloc<CartEvent, CartState>{
     required this.removeFromCart,
     required this.increaseQuantity,
     required this.decreaseQuantity,
+    required this.updateQuantity,
   }) : super(CartState.initial()) {
     on<AddItem>(_addToCart);
     on<LoadCart>(_loadCart);
     on<RemoveItem>(_removeFromCart);
     on<IncreaseQuantity>(_increaseQuantity);
     on<DecreaseQuantity>(_decreaseQuantity);
+    on<UpdateQuantity>(_updateQuantity);
   }
 
   Future<void> _addToCart(AddItem event, Emitter<CartState> emit) async {
     emit(state.copyWith(isLoading: true));
     try{
+      await Future.delayed(const Duration(milliseconds: 800));
       await addToCart(event.item);
       final items = await getCartItems();
       
@@ -85,6 +90,22 @@ class CartBloc extends Bloc<CartEvent, CartState>{
     emit(state.copyWith(isLoading: true));
     try{
       await decreaseQuantity(event.productId);
+      final items = await getCartItems();
+      emit(state.copyWith(isLoading: false, items: items));
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, error: e.toString()));
+    }
+  }
+
+  Future<void> _updateQuantity( 
+    UpdateQuantity event,
+    Emitter<CartState> emit
+  ) async {
+    emit(state.copyWith(isLoading: true));
+    try{
+      await Future.delayed(const Duration(milliseconds: 800));
+
+      await updateQuantity(event.productId, event.quantity);
       final items = await getCartItems();
       emit(state.copyWith(isLoading: false, items: items));
     } catch (e) {
