@@ -27,7 +27,8 @@ void injectEmailUseCase(){
 void injectEmailBloc(){
   serviceLocator.registerLazySingleton(
     () => EmailBloc(
-      checkEmailUseCase:  serviceLocator()
+      checkEmailUseCase:  serviceLocator(),
+      authLocalStorage: serviceLocator(),
     )
   );
 }

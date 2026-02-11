@@ -43,6 +43,8 @@ void injectAuthBlocs() {
       loginUseCase: serviceLocator(), 
       signUpUseCase: serviceLocator(), 
       logoutUseCase: serviceLocator(),
+      authLocalStorage: serviceLocator(),
+      
     ),
   );
 }

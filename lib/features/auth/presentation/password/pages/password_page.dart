@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:shop_project/core/auth/auth_local_storage.dart';
+import 'package:shop_project/core/di/service_locator.dart';
 import 'package:shop_project/core/localization/l10n/app_localizations.dart';
 import 'package:shop_project/core/theme/color_palette.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_event.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_state.dart';
-import 'package:shop_project/features/home/routes.dart';
 
 class PasswordPage extends StatefulWidget {
   const PasswordPage({super.key});
@@ -20,8 +20,19 @@ class _PasswordPageState extends State<PasswordPage> {
 
   final _passwordController = TextEditingController();
 
+  final authStorage = serviceLocator<AuthLocalStorage>();
+
   static const int _passwordLength = 8;
   bool _hasError = false;
+
+  @override
+  void initState(){
+    super.initState();
+    final identity = authStorage.getIdentity();
+    if(identity != null){
+      context.read<AuthBloc>().add(AuthPrefillRequested(identity));
+    }
+  }
 
   @override
   void dispose() {
@@ -50,6 +61,7 @@ class _PasswordPageState extends State<PasswordPage> {
             });
           });
         }
+        
       },
       child: Builder(
         builder: (context) {
@@ -206,7 +218,7 @@ class _PasswordPageState extends State<PasswordPage> {
       child: Center(
         child: TextButton(
           onPressed: () {
-            context.go(HomeRoutes.splash);
+            context.read<AuthBloc>().add(LogoutRequested());
           },
           style: TextButton.styleFrom(
             foregroundColor: AppColors.textSecondary,
@@ -215,7 +227,7 @@ class _PasswordPageState extends State<PasswordPage> {
             ),
           ),
           child: Text(
-            l10n.cancel,
+            l10n.logout,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),

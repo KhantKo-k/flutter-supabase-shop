@@ -98,7 +98,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget _buildUpperSection() {
     final l10n = AppLocalizations.of(context);
-    return Container(
+    return SizedBox(
       height: MediaQuery.sizeOf(context).height * 0.5,
       //color: Colors.white,
       child: Stack(

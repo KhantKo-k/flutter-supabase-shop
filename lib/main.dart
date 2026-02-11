@@ -7,11 +7,13 @@ import 'package:shop_project/core/di/service_locator.dart';
 import 'package:shop_project/core/localization/l10n/app_localizations.dart';
 import 'package:shop_project/core/navigation/app_router.dart';
 import 'package:shop_project/core/theme/theme_cubit.dart';
+import 'package:shop_project/features/auth/domain/email/entity/email_identity.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.dart';
 import 'package:shop_project/features/auth/presentation/email/bloc/email_bloc.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:shop_project/features/product/presentation/cubit/selected_product_cubit.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 
 import 'core/localization/localization.dart';
 
@@ -23,6 +25,10 @@ void main() async {
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0a3Jpc2xiZHB4bnVkb2doZG5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5OTcxOTYsImV4cCI6MjA4NTU3MzE5Nn0._8CteS8AsQxu6ONO58C93ctooy9WpFTWf6abgJjK7eY',
   );
+  await Hive.initFlutter();
+  Hive.registerAdapter(EmailIdentityAdapter());
+  await Hive.openBox('authBox');
+
   
   initServiceLocator();
   runApp(

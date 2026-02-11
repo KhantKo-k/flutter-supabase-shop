@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:shop_project/core/common_widgets/language_selector.dart';
 import 'package:shop_project/core/theme/color_palette.dart';
 import 'package:shop_project/core/theme/theme_cubit.dart';
+import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.dart';
+import 'package:shop_project/features/auth/presentation/password/bloc/auth_event.dart';
 
 class HomePage extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -28,6 +30,11 @@ class HomePage extends StatelessWidget {
           icon: const Icon(Icons.brightness_6),
         ),
         const LanguageSelector(),
+        IconButton(onPressed: () {
+          print('pressing log out');
+          context.read<AuthBloc>().add(LogoutRequested()); },
+        icon: const Icon(Icons.logout),
+        ),
       ],
     );
   }
