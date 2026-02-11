@@ -4,6 +4,7 @@ import 'package:shop_project/features/cart/data/data_sources/cart_local_data_sou
 import 'package:shop_project/features/cart/data/repositories/cart_repository_impl.dart';
 import 'package:shop_project/features/cart/domain/repositories/cart_repository.dart';
 import 'package:shop_project/features/cart/domain/usecases/add_to_cart_usecase.dart';
+import 'package:shop_project/features/cart/domain/usecases/clear_cart_usecase.dart';
 import 'package:shop_project/features/cart/domain/usecases/decrease_quantity_usecase.dart';
 import 'package:shop_project/features/cart/domain/usecases/get_cart_item_usecase.dart';
 import 'package:shop_project/features/cart/domain/usecases/increase_quantity_usecase.dart';
@@ -42,6 +43,9 @@ void injectCartUsecase(){
   serviceLocator.registerLazySingleton(
     () => UpdateQuantityUsecase(repository: serviceLocator())
   );
+  serviceLocator.registerLazySingleton(
+    () => ClearCartUsecase(serviceLocator()),
+  );
 }
 
 void injectCartBloc(){
@@ -53,6 +57,7 @@ void injectCartBloc(){
       increaseQuantity: serviceLocator(), 
       decreaseQuantity: serviceLocator(),
       updateQuantity: serviceLocator(),
+      clearCart: serviceLocator(),
     )
   );
 }

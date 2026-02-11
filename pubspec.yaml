@@ -46,12 +46,12 @@ dependencies:
   equatable: ^2.0.7
   flutter_bloc: ^9.1.1
   get_it: ^9.2.0
-  go_router: 16.0.0
   dartz: ^0.10.1
   collection: ^1.19.1
   cached_network_image: ^3.4.1
   hive_ce: ^2.6.0
   hive_ce_flutter: ^2.0.0
+  go_router: ^17.1.0
  
 
 dev_dependencies:

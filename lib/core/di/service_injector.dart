@@ -8,6 +8,7 @@ import 'package:shop_project/features/auth/auth_injections.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.dart';
 import 'package:shop_project/features/auth/presentation/email/email_injections.dart';
 import 'package:shop_project/features/cart/cart_injections.dart';
+import 'package:shop_project/features/order/order_injections.dart';
 import 'package:shop_project/features/product/product_list_injections.dart';
 
 void initServiceLocator(){
@@ -30,6 +31,7 @@ void _initDataSources(){
   injectEmailRemoteDataSources();
   injectProductRemoteDataSources();
   injectCartLocalDatasource();
+  injectOrderRemoteDatasources();
 }
 
 void _initRepositories(){
@@ -37,6 +39,7 @@ void _initRepositories(){
   injectEmailRepositories();
   injectProductRepositories();
   injectCartRepository();
+  injectOrderRepositories();
 }
 
 void _initUseCases(){
@@ -44,6 +47,7 @@ void _initUseCases(){
   injectEmailUseCase();
   injectProductUseCase();
   injectCartUsecase();
+  injectOrderUseCase();
 }
 
 void _initBlocs(){
@@ -51,6 +55,7 @@ void _initBlocs(){
   injectEmailBloc();
   injectProductBloc();
   injectCartBloc();
+  injectOrderBloc();
 }
 
 void _initServices(){

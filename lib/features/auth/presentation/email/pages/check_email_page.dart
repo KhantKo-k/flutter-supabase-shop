@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shop_project/core/di/service_locator.dart';
 import 'package:shop_project/core/localization/l10n/app_localizations.dart';
-import 'package:shop_project/core/navigation/app_router.dart';
 import 'package:shop_project/core/theme/color_palette.dart';
 import 'package:shop_project/features/auth/presentation/email/bloc/email_bloc.dart';
 import 'package:shop_project/features/auth/presentation/email/bloc/email_event.dart';
 import 'package:shop_project/features/auth/presentation/email/bloc/email_state.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_event.dart';
-import 'package:shop_project/features/auth/routes.dart';
 import 'package:shop_project/features/home/routes.dart';
 
 class CheckEmailPage extends StatefulWidget {
@@ -47,7 +44,7 @@ class _CheckEmailPageState extends State<CheckEmailPage> {
 
         if (state is EmailSuccess) {
           context.read<AuthBloc>().add(AuthPrefillRequested(state.profile));
-          _navigateToPassword();
+          //_navigateToPassword();
         }
       },
       child: Builder(
@@ -220,8 +217,8 @@ class _CheckEmailPageState extends State<CheckEmailPage> {
     );
   }
 
-  void _navigateToPassword() {
-    debugPrint('Pressing login');
-    serviceLocator.get<AppRouter>().navigateToPassword();
-  }
+  // void _navigateToPassword() {
+  //   debugPrint('Pressing login');
+  //   serviceLocator.get<AppRouter>().navigateToPassword();
+  // }
 }

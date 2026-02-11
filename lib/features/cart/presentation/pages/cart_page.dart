@@ -5,6 +5,10 @@ import 'package:shop_project/features/cart/domain/entities/cart_item.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_event.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_state.dart';
+import 'package:shop_project/features/order/domain/entity/order_item_entity.dart';
+import 'package:shop_project/features/order/presentation/bloc/order_bloc.dart';
+import 'package:shop_project/features/order/presentation/bloc/order_event.dart';
+import 'package:shop_project/features/order/presentation/bloc/order_state.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -171,10 +175,59 @@ class CartPage extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: 55,
-            child: ElevatedButton(
-              onPressed: () {},
-              child: const Text('Order Now'),
+            child: BlocConsumer<OrderBloc, OrderState>(
+              listener: (context, orderState) {
+                if (orderState is OrderPlacedSuccess) {
+                  context.read<CartBloc>().add(ClearCart());
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        "Order #${orderState.orderId} placed successfully!",
+                      ),
+                    ),
+                  );
+                } else if (orderState is OrderFailure) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(orderState.message)));
+                }
+              },
+              builder: (context, orderState) {
+                return ElevatedButton(
+                  onPressed: orderState is OrderLoading
+                      ? null
+                      : () {
+                          final orderItems = state.items
+                              .map(
+                                (cartItem) => OrderItemEntity(
+                                  id: '',
+                                  orderId: '',
+                                  productId: cartItem.productId,
+                                  productName: cartItem.name,
+                                  price: cartItem.price,
+                                  quantity: cartItem.quantity,
+                                ),
+                              )
+                              .toList();
+
+                          context.read<OrderBloc>().add(
+                            PlaceOrderRequested(
+                              items: orderItems,
+                              totalAmount: state.totalPrice,
+                            ),
+                          );
+                        },
+                  child: orderState is OrderLoading
+                      ? const CircularProgressIndicator()
+                      : const Text('Order now'),
+                );
+              },
             ),
+            // child: ElevatedButton(
+            //   onPressed: () {},
+            //   child: const Text('Order Now'),
+            // ),
           ),
         ],
       ),

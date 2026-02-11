@@ -11,6 +11,7 @@ import 'package:shop_project/features/auth/domain/email/entity/email_identity.da
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.dart';
 import 'package:shop_project/features/auth/presentation/email/bloc/email_bloc.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:shop_project/features/order/presentation/bloc/order_bloc.dart';
 import 'package:shop_project/features/product/presentation/cubit/selected_product_cubit.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => serviceLocator.get<AuthBloc>()),
         BlocProvider(create: (context) => serviceLocator.get<EmailBloc>()),
         BlocProvider(create: (context) => serviceLocator.get<CartBloc>()),
+        BlocProvider(create: (context) => serviceLocator.get<OrderBloc>()),
         BlocProvider(create: (context) => SelectedProductCubit()),
         BlocProvider(create: (context) => ThemeCubit()),
       ],

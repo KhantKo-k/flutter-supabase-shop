@@ -2,6 +2,7 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/features/cart/domain/usecases/add_to_cart_usecase.dart';
+import 'package:shop_project/features/cart/domain/usecases/clear_cart_usecase.dart';
 import 'package:shop_project/features/cart/domain/usecases/decrease_quantity_usecase.dart';
 import 'package:shop_project/features/cart/domain/usecases/get_cart_item_usecase.dart';
 import 'package:shop_project/features/cart/domain/usecases/increase_quantity_usecase.dart';
@@ -17,6 +18,7 @@ class CartBloc extends Bloc<CartEvent, CartState>{
   final IncreaseQuantityUsecase increaseQuantity;
   final DecreaseQuantityUsecase decreaseQuantity;
   final UpdateQuantityUsecase updateQuantity;
+  final ClearCartUsecase clearCart;
 
   CartBloc({
     required this.addToCart,
@@ -25,6 +27,7 @@ class CartBloc extends Bloc<CartEvent, CartState>{
     required this.increaseQuantity,
     required this.decreaseQuantity,
     required this.updateQuantity,
+    required this.clearCart,
   }) : super(CartState.initial()) {
     on<AddItem>(_addToCart);
     on<LoadCart>(_loadCart);
@@ -32,6 +35,7 @@ class CartBloc extends Bloc<CartEvent, CartState>{
     on<IncreaseQuantity>(_increaseQuantity);
     on<DecreaseQuantity>(_decreaseQuantity);
     on<UpdateQuantity>(_updateQuantity);
+    on<ClearCart> (_onClearCart);
   }
 
   Future<void> _addToCart(AddItem event, Emitter<CartState> emit) async {
@@ -111,5 +115,13 @@ class CartBloc extends Bloc<CartEvent, CartState>{
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
+  }
+
+  Future<void> _onClearCart( 
+    ClearCart event,
+    Emitter<CartState> emit
+  ) async {
+    clearCart();
+    emit(CartState.initial());
   }
 }

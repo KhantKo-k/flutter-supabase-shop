@@ -35,3 +35,4 @@ class UpdateQuantity extends CartEvent{
   UpdateQuantity({required this.productId,required this.quantity});
 }
 
+
