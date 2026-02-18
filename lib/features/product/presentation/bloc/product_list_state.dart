@@ -13,19 +13,18 @@ enum ProductListStatus{
 class ProductListState extends Equatable{
   final ProductListStatus status;
   final List<Product> products;
-  final bool hasReachMax;
+
   final Failure? failure;
 
   const ProductListState({
     this.status = ProductListStatus.initial,
     this.products = const [],
-    this.hasReachMax = false,
     this.failure,
   });
 
   @override
   List<Object?> get props =>
-    [status, products, hasReachMax, failure];
+    [status, products, failure];
 
   ProductListState copyWith({
     ProductListStatus? status,
@@ -36,7 +35,6 @@ class ProductListState extends Equatable{
     return ProductListState(
       status: status ?? this.status,
       products: products ?? this.products,
-      hasReachMax: hasReachMax ?? this.hasReachMax,
       failure: failure ?? this.failure,
     );
   }

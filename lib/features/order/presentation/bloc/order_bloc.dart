@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_project/core/error/failures.dart';
 import 'package:shop_project/features/order/domain/usecases/add_order_items_use_case.dart';
 import 'package:shop_project/features/order/domain/usecases/create_order_use_case.dart';
 import 'package:shop_project/features/order/domain/usecases/get_my_orders_use_case.dart';
@@ -6,7 +7,7 @@ import 'package:shop_project/features/order/domain/usecases/get_order_items_use_
 import 'package:shop_project/features/order/presentation/bloc/order_event.dart';
 import 'package:shop_project/features/order/presentation/bloc/order_state.dart';
 
-class OrderBloc extends Bloc<OrderEvent, OrderState>{
+class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final CreateOrderUseCase createOrder;
   final AddOrderItemsUseCase addOrderItems;
   final GetMyOrdersUseCase getMyOrders;
@@ -17,54 +18,95 @@ class OrderBloc extends Bloc<OrderEvent, OrderState>{
     required this.createOrder,
     required this.getMyOrders,
     required this.getOrderItems,
-  }) : super(OrderInitial()) {
-    on<PlaceOrderRequested> (_onPlaceOrderRequested);
-    on<LoadMyOrders> (_onLoadMyOrders);
-    on<LoadOrderItems> (_onLoadOrderItems);
+  }) : super(const OrderState()) {
+    on<PlaceOrderRequested>(_onPlaceOrderRequested);
+    on<LoadMyOrders>(_onLoadMyOrders);
+    on<LoadOrderItems>(_onLoadOrderItems);
   }
 
-  Future<void> _onPlaceOrderRequested( 
+  Future<void> _onPlaceOrderRequested(
     PlaceOrderRequested event,
     Emitter<OrderState> emit,
   ) async {
-    emit(OrderLoading());
+    emit(state.copyWith(status: OrderStatus.loading, failure: null));
 
     final result = await createOrder(event.totalAmount);
 
     await result.fold(
-      (failure) async => emit(OrderFailure(failure.message)),
+      (failure) async {
+        // emit(OrderFailure(failure.message)),
+        emit(
+          state.copyWith(
+            status: OrderStatus.failure,
+            failure: DataNotFoundFailure('Failed to order!'),
+          ),
+        );
+      },
       (orderId) async {
-        try{
+        try {
           await addOrderItems(orderId: orderId, items: event.items);
-          emit(OrderPlacedSuccess(orderId));
+          //emit(OrderPlacedSuccess(orderId));
+          emit(
+            state.copyWith(
+              status: OrderStatus.success,
+              successOrderId: orderId,
+            ),
+          );
+          final ordersResult = await getMyOrders();
+          ordersResult.fold(
+            (failure) => emit(
+              state.copyWith(status: OrderStatus.failure, failure: failure),
+            ),
+            (orders) => emit(
+              state.copyWith(status: OrderStatus.loaded, orders: orders),
+            ),
+          );
+          //emit(OrderPlacedSuccess(orderId));
         } catch (e) {
-          emit(OrderFailure("Order created but failed to add items."));
+          emit(
+            state.copyWith(
+              status: OrderStatus.failure,
+              failure: UnknownFailure("Order created but failed to add items."),
+            ),
+          );
         }
-      }
+      },
     );
   }
 
-  Future<void> _onLoadMyOrders( 
+  Future<void> _onLoadMyOrders(
     LoadMyOrders event,
     Emitter<OrderState> emit,
   ) async {
-    emit(OrderLoading());
+    emit(state.copyWith(status: OrderStatus.loading, failure: null));
     final result = await getMyOrders();
     result.fold(
-      (failure) => emit(OrderFailure(failure.message)), 
-      (orders) => emit(OrdersLoaded(orders)),
+      (failure) => emit(
+        state.copyWith(
+          status: OrderStatus.failure,
+          failure: DataNotFoundFailure("Failed to load products"),
+        ),
+      ),
+      (orders) =>
+          emit(state.copyWith(status: OrderStatus.loaded, orders: orders)),
     );
   }
 
-  Future<void> _onLoadOrderItems( 
+  Future<void> _onLoadOrderItems(
     LoadOrderItems event,
     Emitter<OrderState> emit,
   ) async {
-    emit(OrderLoading());
+    emit(state.copyWith(status: OrderStatus.loading, failure: null));
     final result = await getOrderItems(event.orderId);
     result.fold(
-      (failure) => emit(OrderFailure(failure.message)), 
-      (items) => emit(OrderItemsLoaded(items)),
+      (failure) => emit(
+        state.copyWith(
+          status: OrderStatus.failure,
+          failure: DataNotFoundFailure("Failed to load products"),
+        ),
+      ),
+      (items) =>
+          emit(state.copyWith(status: OrderStatus.loaded, orderItems: items)),
     );
   }
 }

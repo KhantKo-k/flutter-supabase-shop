@@ -1,5 +1,4 @@
 import 'package:shop_project/core/di/service_locator.dart';
-import 'package:shop_project/features/product/domain/usecases/get_product_use_case.dart';
 import 'package:shop_project/features/profile/data/datasources/profile_remote_datasource.dart';
 import 'package:shop_project/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:shop_project/features/profile/domain/repositories/profile_repository.dart';

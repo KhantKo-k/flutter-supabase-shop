@@ -177,25 +177,38 @@ class CartPage extends StatelessWidget {
             height: 55,
             child: BlocConsumer<OrderBloc, OrderState>(
               listener: (context, orderState) {
-                if (orderState is OrderPlacedSuccess) {
-                  context.read<CartBloc>().add(ClearCart());
-
-                  ScaffoldMessenger.of(context).showSnackBar(
+                switch(orderState.status) {
+                  case OrderStatus.initial:
+                  case OrderStatus.loading:
+                    break;
+                  case OrderStatus.success:
+                    context.read<CartBloc>().add(ClearCart());
+                    ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        "Order #${orderState.orderId} placed successfully!",
+                        "Order #${orderState.successOrderId} placed successfully!",
                       ),
                     ),
                   );
-                } else if (orderState is OrderFailure) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(orderState.message)));
+                  break;
+
+                  case OrderStatus.failure:
+                    ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(orderState.failure?.message ?? 'Unknown error'),
+                    ),
+                  );
+                  break;
+                  case OrderStatus.loaded:
+                    break;
                 }
+
               },
               builder: (context, orderState) {
+                bool isPlacing = orderState.status == OrderStatus.loading;
+
                 return ElevatedButton(
-                  onPressed: orderState is OrderLoading
+                  onPressed: isPlacing
                       ? null
                       : () {
                           final orderItems = state.items
@@ -218,16 +231,12 @@ class CartPage extends StatelessWidget {
                             ),
                           );
                         },
-                  child: orderState is OrderLoading
+                  child: isPlacing
                       ? const CircularProgressIndicator()
                       : const Text('Order now'),
                 );
               },
             ),
-            // child: ElevatedButton(
-            //   onPressed: () {},
-            //   child: const Text('Order Now'),
-            // ),
           ),
         ],
       ),
