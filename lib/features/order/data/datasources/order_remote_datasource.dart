@@ -10,6 +10,8 @@ abstract class OrderRemoteDatasource {
   Future<List<OrderModel>> getOrders();
 
   Future<List<OrderItemModel>> getOrderItems(String orderId);
+
+  Future<void> deleteOrder(String orderId);
 }
 
 class OrderRemoteDatasourceImpl extends OrderRemoteDatasource{
@@ -63,5 +65,13 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource{
       .eq('order_id', orderId);
 
     return response.map((e) => OrderItemModel.fromJson(e)).toList();
+  }
+
+  @override
+  Future<void> deleteOrder(String orderId) async {
+    await client
+      .from('orders')
+      .delete()
+      .eq('id', orderId);
   }
 }

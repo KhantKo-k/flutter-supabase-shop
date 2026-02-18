@@ -88,4 +88,20 @@ class OrderRepositoryImpl implements OrderRepository{
       return Left(UnknownFailure(FailureMessages.unexpectedError));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteOrder( 
+    String orderId,
+  ) async {
+    try{
+      await datasource.deleteOrder(orderId);
+      return Right(null);
+    }on PostgrestException catch (e) {
+      return Left(SupabaseFailure(e.message));
+    } on SocketException {
+      return Left(NetworkFailure(FailureMessages.networkError));
+    } catch (_) {
+      return Left(UnknownFailure(FailureMessages.unexpectedError));
+    }
+  }
 }

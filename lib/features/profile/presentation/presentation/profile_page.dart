@@ -1,4 +1,5 @@
 // import 'package:dartz/dartz.dart' hide State;
+// import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/widgets.dart' hide State;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -205,6 +206,19 @@ void _showOrderDetailSheet(BuildContext context, String orderId) {
                           },
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton.icon(
+                            onPressed: () =>
+                                _showDeleteConfirmation(context, orderId),
+                            label: const Text('Delete this order?'),
+                            icon: const Icon(Icons.delete_outline),
+                          ),
+                        ),
+                      ),
                     ],
                   );
                 case OrderStatus.failure:
@@ -213,6 +227,34 @@ void _showOrderDetailSheet(BuildContext context, String orderId) {
             },
           );
         },
+      );
+    },
+  );
+}
+
+void _showDeleteConfirmation(BuildContext context, String orderId) {
+  showDialog(
+    context: context,
+    builder: (dialogContext) {
+      return AlertDialog(
+        title: const Text('Confirm Delete'),
+        content: const Text(
+          'Are you sure you want to delete this order? This cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              context.read<OrderBloc>().add(DeleteOrder(orderId));
+              Navigator.of(dialogContext).pop();
+              Navigator.of(context).pop();
+            },
+            child: const Text('Delete'),
+          ),
+        ],
       );
     },
   );

@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shop_project/features/order/domain/entity/order_item_entity.dart';
 
@@ -32,3 +33,10 @@ class LoadOrderItems extends OrderEvent{
   List<Object?> get props => [orderId];
 }
 
+class DeleteOrder extends OrderEvent{
+  final String orderId;
+  const DeleteOrder(this.orderId);
+
+  @override
+  List<Object?> get props => [orderId];
+}

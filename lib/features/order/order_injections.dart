@@ -6,6 +6,7 @@ import 'package:shop_project/features/order/data/repositories/order_repository_i
 import 'package:shop_project/features/order/domain/repository/order_repository.dart';
 import 'package:shop_project/features/order/domain/usecases/add_order_items_use_case.dart';
 import 'package:shop_project/features/order/domain/usecases/create_order_use_case.dart';
+import 'package:shop_project/features/order/domain/usecases/delete_order_use_case.dart';
 import 'package:shop_project/features/order/domain/usecases/get_my_orders_use_case.dart';
 import 'package:shop_project/features/order/domain/usecases/get_order_items_use_case.dart';
 import 'package:shop_project/features/order/presentation/bloc/order_bloc.dart';
@@ -38,6 +39,10 @@ void injectOrderUseCase(){
   serviceLocator.registerLazySingleton(
     () => GetOrderItemsUseCase(serviceLocator())
   );
+
+  serviceLocator.registerLazySingleton(
+    () => DeleteOrderUseCase(serviceLocator())
+  );
 }
 
 void injectOrderBloc(){
@@ -46,7 +51,8 @@ void injectOrderBloc(){
       addOrderItems: serviceLocator(), 
       createOrder: serviceLocator(), 
       getMyOrders: serviceLocator(), 
-      getOrderItems: serviceLocator()
+      getOrderItems: serviceLocator(),
+      deleteOrder: serviceLocator(),
     )
   );
 }

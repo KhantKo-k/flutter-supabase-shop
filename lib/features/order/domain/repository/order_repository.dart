@@ -19,4 +19,7 @@ abstract class OrderRepository {
     String orderId,
   );
 
+  Future<Either<Failure, void>> deleteOrder( 
+    String orderId,
+  );
 }
