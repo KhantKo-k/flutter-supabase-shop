@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter/widgets.dart' hide State;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_project/core/theme/color_palette.dart';
 import 'package:shop_project/features/order/domain/entity/order_entity.dart';
 import 'package:shop_project/features/order/presentation/bloc/order_bloc.dart';
 import 'package:shop_project/features/order/presentation/bloc/order_event.dart';
@@ -20,6 +21,17 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  bool isEditing = false;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -31,7 +43,6 @@ class _ProfilePageState extends State<ProfilePage> {
     return Column(
       children: [
         _buildProfileHeader(),
-        //const Divider(thickness: 1),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
           child: Text(
@@ -66,6 +77,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildProfileDetail(ProfileEntity profile, BuildContext context) {
+    if (!isEditing) {
+      _usernameController.text = profile.username ?? '';
+      _emailController.text = profile.email;
+    }
     return Card(
       margin: const EdgeInsets.all(16.0),
       child: Padding(
@@ -74,16 +89,72 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             const CircleAvatar(radius: 40, child: Icon(Icons.person, size: 40)),
             const SizedBox(height: 12),
-            Text(profile.username ?? 'No name'),
-            Text(profile.email),
-            const SizedBox(height: 12),
-            ElevatedButton.icon(
-              onPressed: () {
-                context.read<ProfileBloc>().add(UpdateProfle(profile));
-              },
-              icon: const Icon(Icons.edit),
-              label: const Text('Update Profile'),
+            TextField(
+              controller: _usernameController,
+              enabled: isEditing,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.person_outline),
+              ),
             ),
+            //Text(profile.username ?? 'No name', style: Theme.of(context).textTheme.bodyLarge, ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _emailController,
+              enabled: isEditing,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.email_outlined),
+              ),
+            ),
+            //Text(profile.email),
+            const SizedBox(height: 12),
+            isEditing
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            setState(() {
+                              isEditing = false;
+                              _usernameController.text = profile.username ?? '';
+                              _emailController.text = profile.email;
+                            });
+                          },
+                          child: const Text('Cancel'),
+                          //label: const Text('Cancel'),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            final updatedProfile = profile.copyWith(
+                              username: _usernameController.text,
+                              email: _emailController.text,
+                            );
+                            context.read<ProfileBloc>().add(
+                              UpdateProfle(updatedProfile),
+                            );
+                            setState(() {
+                              isEditing = false;
+                            });
+                          },
+                          child: const Text('Save'),
+                          //label: const Text('Update Profile'),
+                        ),
+                      ),
+                    ],
+                  )
+                : ElevatedButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        isEditing = true;
+                      });
+                    },
+                    icon: const Icon(Icons.edit),
+                    label: const Text('Edit Profile'),
+                  ),
           ],
         ),
       ),
@@ -107,14 +178,6 @@ class _ProfilePageState extends State<ProfilePage> {
               break;
           }
           return const Center(child: Text("No orders yet!"));
-          // if (state is OrderLoading) {
-          //   return const Center(child: CircularProgressIndicator());
-          // } else if (state is OrdersLoaded) {
-          //   return _buildOrderList(state.orders);
-          // } else if (state is OrderFailure) {
-          //   return Center(child: Text(state.message));
-          // }
-          // return const Center(child: Text('No orders yet!'));
         },
       ),
     );
@@ -216,6 +279,10 @@ void _showOrderDetailSheet(BuildContext context, String orderId) {
                                 _showDeleteConfirmation(context, orderId),
                             label: const Text('Delete this order?'),
                             icon: const Icon(Icons.delete_outline),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.error,
+                              foregroundColor: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -252,7 +319,10 @@ void _showDeleteConfirmation(BuildContext context, String orderId) {
               Navigator.of(dialogContext).pop();
               Navigator.of(context).pop();
             },
-            child: const Text('Delete'),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: AppColors.error),
+            ),
           ),
         ],
       );

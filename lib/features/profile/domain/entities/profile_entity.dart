@@ -10,4 +10,12 @@ class ProfileEntity {
     this.username,
     this.avatarUrl,
   });
+
+ProfileEntity copyWith({String? username, String? email}) {
+  return ProfileEntity(
+    id: id,
+    username: username ?? this.username,
+    email: email ?? this.email,
+  );
+}
 }

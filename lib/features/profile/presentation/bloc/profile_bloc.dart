@@ -45,5 +45,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       (failure) => emit(ProfileError(failure.message)),
       (_) => emit(ProfileUpdated()),
     );
+    await getMyProfile();
   }
 } 

@@ -89,7 +89,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       (failure) => emit(
         state.copyWith(
           status: OrderStatus.failure,
-          failure: DataNotFoundFailure("Failed to load products"),
+          failure: DataNotFoundFailure("No orders found"),
         ),
       ),
       (orders) =>
@@ -107,7 +107,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       (failure) => emit(
         state.copyWith(
           status: OrderStatus.failure,
-          failure: DataNotFoundFailure("Failed to load products"),
+          failure: DataNotFoundFailure("Failed to load orders items"),
         ),
       ),
       (items) =>

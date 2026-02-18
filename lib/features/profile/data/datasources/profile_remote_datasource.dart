@@ -28,6 +28,7 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
 
   @override
   Future<void> updateProfile(ProfileModel profile) async {
-    await client.from('profile').update(profile.toJson()).eq('id', profile.id);
+    await client.from('profiles').update({
+      'username': profile.username,}).eq('id', profile.id);
   }
 }
