@@ -4,6 +4,7 @@ import 'package:shop_project/features/cart/routes.dart';
 import 'package:shop_project/features/home/presentation/home_page.dart';
 import 'package:shop_project/features/home/presentation/splash_screen.dart';
 import 'package:shop_project/features/product/routes.dart';
+import 'package:shop_project/features/profile/routes.dart';
 
 final _homeNavigatorKey = GlobalKey<NavigatorState>();
 final _cartNavigatorKey = GlobalKey<NavigatorState>();
@@ -12,7 +13,7 @@ final _profileNavigatorKey = GlobalKey<NavigatorState>();
 class HomeRoutes {
   static const splash = '/';
   static const home = ProductRoutes.products;
-  static const profile = '/profile';
+  static const profile = ProfileRoutes.profile;
   static const cart = CartRoutes.cart;
 
   static final routes = [
@@ -42,10 +43,11 @@ class HomeRoutes {
         StatefulShellBranch(
           navigatorKey: _profileNavigatorKey,
           routes: [
-            GoRoute(
-              path: profile,
-              builder: (context, state) => const ChildPage(pageName: 'Profile'),
-            ),
+            ...ProfileRoutes.shellRoutes,
+            // GoRoute(
+            //   path: profile,
+            //   builder: (context, state) => const ChildPage(pageName: 'Profile'),
+            // ),
           ],
         ),
       ],

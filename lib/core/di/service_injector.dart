@@ -10,6 +10,7 @@ import 'package:shop_project/features/auth/presentation/email/email_injections.d
 import 'package:shop_project/features/cart/cart_injections.dart';
 import 'package:shop_project/features/order/order_injections.dart';
 import 'package:shop_project/features/product/product_list_injections.dart';
+import 'package:shop_project/features/profile/profile_injections.dart';
 
 void initServiceLocator(){
   serviceLocator.registerLazySingleton(
@@ -32,6 +33,7 @@ void _initDataSources(){
   injectProductRemoteDataSources();
   injectCartLocalDatasource();
   injectOrderRemoteDatasources();
+  injectProfileRemoteDataSources();
 }
 
 void _initRepositories(){
@@ -40,6 +42,7 @@ void _initRepositories(){
   injectProductRepositories();
   injectCartRepository();
   injectOrderRepositories();
+  injectProfileRepositories();
 }
 
 void _initUseCases(){
@@ -48,6 +51,7 @@ void _initUseCases(){
   injectProductUseCase();
   injectCartUsecase();
   injectOrderUseCase();
+  injectProfileUseCases();
 }
 
 void _initBlocs(){
@@ -56,6 +60,7 @@ void _initBlocs(){
   injectProductBloc();
   injectCartBloc();
   injectOrderBloc();
+  injectProfileBloc();
 }
 
 void _initServices(){
