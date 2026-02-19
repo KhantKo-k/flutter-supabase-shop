@@ -36,7 +36,7 @@ class AppRouter {
             HomeRoutes.splash,
             AuthRoutes.email,
             AuthRoutes.signup,
-            AuthRoutes.password,
+            //AuthRoutes.password,
           ];
           debugPrint("Current path: ${state.fullPath}");
 
@@ -50,7 +50,9 @@ class AppRouter {
 
           if (!isAuthenticated &&
               hasIdentity &&
-              state.topRoute?.path != AuthRoutes.password) {
+              authPaths.contains(state.topRoute?.path)
+              //state.topRoute?.path == AuthRoutes.password
+              ) {
             return AuthRoutes.password;
           }
 

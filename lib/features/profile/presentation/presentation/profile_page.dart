@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/core/theme/color_palette.dart';
+import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.dart';
+import 'package:shop_project/features/auth/presentation/password/bloc/auth_event.dart';
 import 'package:shop_project/features/order/domain/entity/order_entity.dart';
 import 'package:shop_project/features/order/presentation/bloc/order_bloc.dart';
 import 'package:shop_project/features/order/presentation/bloc/order_event.dart';
@@ -84,24 +86,44 @@ class _ProfilePageState extends State<ProfilePage> {
     }
     return Card(
       margin: const EdgeInsets.all(16.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const CircleAvatar(radius: 40, child: Icon(Icons.person, size: 40)),
-            const SizedBox(height: 12),
-            _buildUsernameField(),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(26.0),
+            child: Column(
+              children: [
+                _buildAvatar(),
+          
+                const SizedBox(height: 12),
+          
+                _buildUsernameField(),
+          
+                const SizedBox(height: 12),
+          
+                _buildPasswordFiled(),
+          
+                const SizedBox(height: 12),
+                isEditing ? _buildCancelSaveButoons(profile) : _buildEditButton(),
+              ],
+            ),
+          ),
 
-            const SizedBox(height: 12),
 
-            _buildPasswordFiled(),
-
-            const SizedBox(height: 12),
-            isEditing ? _buildCancelSaveButoons(profile) : _buildEditButton(),
-          ],
-        ),
+          Positioned(
+            top: 4,
+            right: 4,
+            child: IconButton(
+            onPressed: () => _showProfileDeleteConfirmation(context),
+            icon: Icon(Icons.delete_outline, color: AppColors.error,)
+            ),
+          )
+        ],
       ),
     );
+  }
+
+  Widget _buildAvatar() {
+    return CircleAvatar(radius: 40, child: Icon(Icons.person, size: 40));
   }
 
   Widget _buildUsernameField() {
@@ -351,4 +373,33 @@ void _showDeleteConfirmation(BuildContext context, String orderId) {
       );
     },
   );
+}
+
+void _showProfileDeleteConfirmation(BuildContext context){
+    showDialog(context: context,
+     builder: (dialogContext) {
+      return AlertDialog(
+        title: const Text('Confirm Delete'),
+        content: const Text(
+          'Are you sure you want to delete this profile? This cannot be undone.',
+        ),
+         actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              context.read<AuthBloc>().add(AccountDeletionRequest());
+              Navigator.of(dialogContext).pop();
+            },
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: AppColors.error),
+            ),
+          ),
+        ],
+      );
+     }
+    );
 }

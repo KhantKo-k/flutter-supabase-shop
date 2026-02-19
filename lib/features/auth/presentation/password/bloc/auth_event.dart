@@ -48,3 +48,7 @@ class AuthPrefillRequested extends AuthEvent {
   @override
   List<Object?> get props => [identity];
 }
+
+class AccountDeletionRequest extends AuthEvent{
+  const AccountDeletionRequest();
+}

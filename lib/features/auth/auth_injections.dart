@@ -3,6 +3,7 @@ import 'package:shop_project/core/di/service_locator.dart';
 import 'package:shop_project/features/auth/data/password/datasource/auth_remote_data_source.dart';
 import 'package:shop_project/features/auth/data/password/repositories/auth_repository_impl.dart';
 import 'package:shop_project/features/auth/domain/password/repository/auth_repository.dart';
+import 'package:shop_project/features/auth/domain/password/usecases/accout_delete_use_case.dart';
 import 'package:shop_project/features/auth/domain/password/usecases/login_use_case.dart';
 import 'package:shop_project/features/auth/domain/password/usecases/logout_use_case.dart';
 import 'package:shop_project/features/auth/domain/password/usecases/sign_up_use_case.dart';
@@ -18,6 +19,7 @@ void injectAuthRemoteDataSources(){
 void injectAuthRepositories(){
   serviceLocator.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
+      serviceLocator(),
       serviceLocator(),
     )
   );
@@ -35,6 +37,10 @@ void injectAuthUseCase(){
   serviceLocator.registerLazySingleton(
     () => LogoutUseCase(repository: serviceLocator()),
   );
+
+  serviceLocator.registerLazySingleton(
+    () => DeleteAccountUseCase(serviceLocator())
+  );
 }
 
 void injectAuthBlocs() {
@@ -44,7 +50,7 @@ void injectAuthBlocs() {
       signUpUseCase: serviceLocator(), 
       logoutUseCase: serviceLocator(),
       authLocalStorage: serviceLocator(),
-      
+      deleteUseCase: serviceLocator(),
     ),
   );
 }

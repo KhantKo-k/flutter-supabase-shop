@@ -54,3 +54,5 @@ class AuthError extends AuthState {
 }
 
 class SignUpSuccess extends AuthState {}
+
+class AccountDeletion extends AuthState{}

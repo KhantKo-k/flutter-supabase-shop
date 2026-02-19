@@ -9,6 +9,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 abstract class AuthRemoteDataSource {
   Future<Either<Failure, UserEntity>> login(String email, String password);
   Future<Either<Failure, UserEntity>> signUp(String username, String email, String password);
+  Future<void> accountDeletion();
 }
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
@@ -75,6 +76,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       return left(const NetworkFailure(FailureMessages.networkError));
     } catch (e) {
       return left(const UnknownFailure(FailureMessages.unexpectedError));
+    }
+  }
+
+  @override
+  Future<void> accountDeletion() async {
+    final response = await client.functions.invoke('delete-user');
+
+    if(response.status != 200){
+      throw Exception('Failed to delete account: ${response.data}');
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/core/auth/auth_local_storage.dart';
 import 'package:shop_project/features/auth/domain/email/entity/email_identity.dart';
+import 'package:shop_project/features/auth/domain/password/usecases/accout_delete_use_case.dart';
 import 'package:shop_project/features/auth/domain/password/usecases/login_use_case.dart';
 import 'package:shop_project/features/auth/domain/password/usecases/logout_use_case.dart';
 import 'package:shop_project/features/auth/domain/password/usecases/sign_up_use_case.dart';
@@ -11,6 +12,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;
   final SignUpUseCase signUpUseCase;
   final LogoutUseCase logoutUseCase;
+  final DeleteAccountUseCase deleteUseCase;
   final AuthLocalStorage authLocalStorage;
 
   AuthBloc({
@@ -18,12 +20,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.signUpUseCase,
     required this.logoutUseCase,
     required this.authLocalStorage,
+    required this.deleteUseCase,
     EmailIdentity? initialIdentity,
   }) : super(AuthInitial()) {
     on<AuthPrefillRequested>(_onPrefill);
     on<LoginRequested>(_onLoginRequested);
     on<SignUpRequested>(_onSignUpRequested);
     on<LogoutRequested>(_onLogoutRequested);
+    on<AccountDeletionRequest>(_onDeleteRequest);
   }
 
   void _onPrefill(AuthPrefillRequested event, Emitter<AuthState> emit) {
@@ -106,5 +110,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await authLocalStorage.clearIdentity();
     logoutUseCase();
     emit(const Unauthenticated());
+  }
+
+  Future<void> _onDeleteRequest(
+    AccountDeletionRequest event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(LoginLoading());
+    try {
+      final result = await deleteUseCase();
+
+      result.fold(
+        (failure) => emit(AuthError(failure.message)),
+        (_) => emit(const Unauthenticated()),
+      );
+    } catch (e) {
+      emit(AuthError('Failed to delete account: ${e.toString()}'));
+    }
   }
 }
