@@ -16,6 +16,7 @@ class ProfileRoutes {
           create: (context) => ProfileBloc(
             getMyProfile: serviceLocator(),
             updateProfile: serviceLocator(),
+            authLocalStorage: serviceLocator(),
           )..add(LoadProfile()),
           child: ProfilePage(),
         );

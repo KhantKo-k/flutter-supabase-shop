@@ -9,7 +9,7 @@ class UpdateProfileUseCase {
 
   UpdateProfileUseCase(this.repository);
 
-  Future<Either<Failure, void>> call(ProfileEntity profile){
+  Future<Either<Failure, ProfileEntity>> call(ProfileEntity profile){
     return repository.updateProfile(profile);
   }
 }

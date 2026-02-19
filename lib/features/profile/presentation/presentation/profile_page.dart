@@ -1,7 +1,4 @@
-// import 'package:dartz/dartz.dart' hide State;
-// import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/widgets.dart' hide State;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/core/theme/color_palette.dart';
 import 'package:shop_project/features/order/domain/entity/order_entity.dart';
@@ -66,6 +63,10 @@ class _ProfilePageState extends State<ProfilePage> {
           return Center(child: Text(state.message));
         }
 
+        if (state is ProfileUpdating) {
+          return const CircularProgressIndicator();
+        }
+
         if (state is ProflileLoaded) {
           return Column(
             children: [_buildProfileDetail(state.profile, context)],
@@ -89,75 +90,97 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             const CircleAvatar(radius: 40, child: Icon(Icons.person, size: 40)),
             const SizedBox(height: 12),
-            TextField(
-              controller: _usernameController,
-              enabled: isEditing,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.person_outline),
-              ),
-            ),
-            //Text(profile.username ?? 'No name', style: Theme.of(context).textTheme.bodyLarge, ),
+            _buildUsernameField(),
+
             const SizedBox(height: 12),
-            TextField(
-              controller: _emailController,
-              enabled: isEditing,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.email_outlined),
-              ),
-            ),
-            //Text(profile.email),
+
+            _buildPasswordFiled(),
+
             const SizedBox(height: 12),
-            isEditing
-                ? Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            setState(() {
-                              isEditing = false;
-                              _usernameController.text = profile.username ?? '';
-                              _emailController.text = profile.email;
-                            });
-                          },
-                          child: const Text('Cancel'),
-                          //label: const Text('Cancel'),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            final updatedProfile = profile.copyWith(
-                              username: _usernameController.text,
-                              email: _emailController.text,
-                            );
-                            context.read<ProfileBloc>().add(
-                              UpdateProfle(updatedProfile),
-                            );
-                            setState(() {
-                              isEditing = false;
-                            });
-                          },
-                          child: const Text('Save'),
-                          //label: const Text('Update Profile'),
-                        ),
-                      ),
-                    ],
-                  )
-                : ElevatedButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        isEditing = true;
-                      });
-                    },
-                    icon: const Icon(Icons.edit),
-                    label: const Text('Edit Profile'),
-                  ),
+            isEditing ? _buildCancelSaveButoons(profile) : _buildEditButton(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildUsernameField() {
+    return TextField(
+      controller: _usernameController,
+      enabled: isEditing,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        prefixIcon: Icon(Icons.person_outline),
+      ),
+    );
+  }
+
+  Widget _buildPasswordFiled() {
+    return TextField(
+      controller: _emailController,
+      enabled: false,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        prefixIcon: Icon(Icons.email_outlined),
+      ),
+    );
+  }
+
+  Widget _buildCancelSaveButoons(ProfileEntity profile) {
+    return Row(
+      children: [
+        _buildCancelButton(profile),
+
+        const SizedBox(width: 12),
+
+        _buildSaveButton(profile),
+      ],
+    );
+  }
+
+  Widget _buildCancelButton(ProfileEntity profile) {
+    return Expanded(
+      child: OutlinedButton(
+        onPressed: () {
+          setState(() {
+            isEditing = false;
+            _usernameController.text = profile.username ?? '';
+            _emailController.text = profile.email;
+          });
+        },
+        child: const Text('Cancel'),
+      ),
+    );
+  }
+
+  Widget _buildSaveButton(ProfileEntity profile) {
+    return Expanded(
+      child: OutlinedButton(
+        onPressed: () {
+          final updatedProfile = profile.copyWith(
+            username: _usernameController.text,
+            email: _emailController.text,
+          );
+          context.read<ProfileBloc>().add(UpdateProfle(updatedProfile));
+          setState(() {
+            isEditing = false;
+          });
+        },
+        child: const Text('Save'),
+        //label: const Text('Update Profile'),
+      ),
+    );
+  }
+
+  Widget _buildEditButton() {
+    return ElevatedButton.icon(
+      onPressed: () {
+        setState(() {
+          isEditing = true;
+        });
+      },
+      icon: const Icon(Icons.edit),
+      label: const Text('Edit Profile'),
     );
   }
 

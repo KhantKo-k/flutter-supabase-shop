@@ -13,7 +13,6 @@ class ProflileLoaded extends ProfileState{
 
 class ProfileUpdating extends ProfileState{}
 
-class ProfileUpdated extends ProfileState{}
 
 class ProfileError extends ProfileState{
   final String message;

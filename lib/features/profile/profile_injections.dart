@@ -31,7 +31,8 @@ void injectProfileBloc(){
   serviceLocator.registerLazySingleton(
     () => ProfileBloc(
       getMyProfile: serviceLocator(), 
-      updateProfile: serviceLocator()
+      updateProfile: serviceLocator(),
+      authLocalStorage: serviceLocator(),
     ),
   );
 }

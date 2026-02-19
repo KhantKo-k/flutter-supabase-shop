@@ -3,7 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class ProfileRemoteDatasource {
   Future<ProfileModel> getProfile();
-  Future<void> updateProfile(ProfileModel profile);
+  Future<ProfileModel> updateProfile(ProfileModel profile);
 }
 
 class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
@@ -27,8 +27,15 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
   }
 
   @override
-  Future<void> updateProfile(ProfileModel profile) async {
-    await client.from('profiles').update({
-      'username': profile.username,}).eq('id', profile.id);
+  Future<ProfileModel> updateProfile(ProfileModel profile) async {
+    final data = await client
+      .from('profiles')
+      .update({
+      'username': profile.username,})
+      .eq('id', profile.id)
+      .select()
+      .single();
+
+    return ProfileModel.fromJson(data);
   }
 }

@@ -18,4 +18,16 @@ class EmailIdentity {
     required this.username,
     this.avatarUrl,
   });
+
+  EmailIdentity copyWith({
+    String? email,
+    String? username,
+    String? avatarUrl,
+  }){
+    return EmailIdentity(
+      email: email ?? this.email, 
+      username: username ?? this.username,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+    );
+  }
 }

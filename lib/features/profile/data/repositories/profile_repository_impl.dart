@@ -27,11 +27,11 @@ class ProfileRepositoryImpl implements ProfileRepository{
   }
 
   @override
-  Future<Either<Failure, void>> updateProfile( 
+  Future<Either<Failure, ProfileEntity>> updateProfile( 
     ProfileEntity profile,
   ) async {
     try{
-      await datasource.updateProfile(
+      final data = await datasource.updateProfile(
         ProfileModel(
           id: profile.id, 
           email: profile.email,
@@ -39,7 +39,7 @@ class ProfileRepositoryImpl implements ProfileRepository{
           avatarUrl: profile.avatarUrl,
         )
       );
-      return const Right(null);
+      return Right(data);
     } catch (_) {
       return Left(UnknownFailure(FailureMessages.unexpectedError));
     }

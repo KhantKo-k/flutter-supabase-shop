@@ -4,5 +4,5 @@ import 'package:shop_project/features/profile/domain/entities/profile_entity.dar
 
 abstract class ProfileRepository {
   Future<Either<Failure, ProfileEntity>> getMyProfile();
-  Future<Either<Failure, void>> updateProfile(ProfileEntity profile);
+  Future<Either<Failure, ProfileEntity>> updateProfile(ProfileEntity profile);
 }
