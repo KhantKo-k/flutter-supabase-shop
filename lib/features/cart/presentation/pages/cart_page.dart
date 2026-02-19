@@ -186,7 +186,7 @@ class CartPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        "Order #${orderState.successOrderId} placed successfully!",
+                        "Order placed successfully!",
                       ),
                     ),
                   );

@@ -20,18 +20,23 @@ class OrderModel extends OrderEntity{
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
 
+  @JsonKey(name: 'order_display_id')
+  final String orderDisplayId;
+
   const OrderModel({
     required this.id,
     required this.userId,
     required this.status,
     required this.totalAmount,
-    required this.createdAt
+    required this.createdAt,
+    required this.orderDisplayId,
   }) : super( 
     id: id,
     userId: userId,
     status: status,
     totalAmount: totalAmount,
     createdAt: createdAt,
+    orderDisplayId: orderDisplayId,
   );
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>

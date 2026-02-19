@@ -243,8 +243,8 @@ class _ProfilePageState extends State<ProfilePage> {
         final order = orders[index];
         return ListTile(
           leading: const Icon(Icons.receipt_long),
-          title: Text("Order #${order.id}"),
-          subtitle: Text("Total : \$${order.totalAmount}"),
+          title: Text("Order #${order.orderDisplayId}"),
+          subtitle: Text("Total : \$${order.orderDisplayId}"),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
             context.read<OrderBloc>().add(LoadOrderItems(order.id));
