@@ -11,6 +11,7 @@ ProfileModel _$ProfileModelFromJson(Map<String, dynamic> json) => ProfileModel(
   email: json['email'] as String,
   username: json['username'] as String?,
   avatarUrl: json['avatarUrl'] as String?,
+  phone: json['phone'] as String?,
 );
 
 Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
@@ -18,5 +19,6 @@ Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
       'id': instance.id,
       'email': instance.email,
       'username': instance.username,
+      'phone': instance.phone,
       'avatarUrl': instance.avatarUrl,
     };

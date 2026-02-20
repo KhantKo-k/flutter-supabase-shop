@@ -21,19 +21,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _usernameContrller = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
+  final TextEditingController _phoneController =
       TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
-  bool _isConfirmPasswordVisible = false;
+  // bool _isConfirmPasswordVisible = false;
 
   @override
   void dispose() {
     _usernameContrller.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -143,8 +143,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           children: [
             _buildUsernameField(l10n, isLoading),
             _buildEmailField(l10n, isLoading),
+            _buildPhoneField(l10n, isLoading),
             _buildPasswordFiled(l10n, isLoading),
-            _buildConfirmPasswordField(l10n, isLoading),
           ],
         );
       },
@@ -254,44 +254,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget _buildConfirmPasswordField(AppLocalizations l10n, bool isLoading) {
+  Widget _buildPhoneField(AppLocalizations l10n, bool isLoading) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 10.0),
       child: TextFormField(
-        controller: _confirmPasswordController,
-        obscureText: !_isConfirmPasswordVisible,
+        controller: _phoneController,
+        // obscureText: !_isConfirmPasswordVisible,
         decoration: InputDecoration(
           filled: true,
-          labelText: l10n.password,
+          labelText: 'Phone',
           labelStyle: const TextStyle(
             color: AppColors.textSecondary,
             fontWeight: FontWeight.bold,
           ),
-          suffixIcon: IconButton(
-            onPressed: () {
-              setState(() {
-                _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
-              });
-            },
-            icon: Icon(
-              _isConfirmPasswordVisible
-                  ? Icons.visibility
-                  : Icons.visibility_off,
-              color: Colors.black,
-            ),
-          ),
+          
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(40),
             borderSide: BorderSide.none,
           ),
         ),
-        keyboardType: TextInputType.visiblePassword,
+        keyboardType: TextInputType.number,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Confirm your password';
+            return 'Enter your phone number';
           }
-          if (value != _passwordController.text) {
-            return 'Passwords do not match';
+          if(value.length != 11){
+            return 'Enter a valid phone number';
           }
           return null;
         },
@@ -309,12 +297,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
           padding: const EdgeInsets.all(18.0),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              // Change to your preferred color
               foregroundColor: Colors.white,
               minimumSize: const Size(
                 double.infinity,
                 55,
-              ), // Makes it wide like the fields
+              ),
             ),
             onPressed: isLoading ? null : _signUp,
             child: isLoading
@@ -359,6 +346,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         username: _usernameContrller.text.trim(),
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
+        phone: _phoneController.text.trim(),
       ),
     );
   }

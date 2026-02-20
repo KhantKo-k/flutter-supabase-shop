@@ -12,6 +12,7 @@ class ProfileModel extends ProfileEntity{
     required super.email,
     super.username,
     super.avatarUrl,
+    super.phone,
   });
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>

@@ -14,6 +14,7 @@ abstract class AuthRepository {
      String username,
      String email,
      String password,
+     String phone,
   );
 
   Future<Either<Failure, void>> deleteAccount();

@@ -31,7 +31,8 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
     final data = await client
       .from('profiles')
       .update({
-      'username': profile.username,})
+      'username': profile.username,
+      'phone': profile.phone,})
       .eq('id', profile.id)
       .select()
       .single();

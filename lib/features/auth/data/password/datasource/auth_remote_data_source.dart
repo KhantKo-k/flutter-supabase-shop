@@ -8,7 +8,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract class AuthRemoteDataSource {
   Future<Either<Failure, UserEntity>> login(String email, String password);
-  Future<Either<Failure, UserEntity>> signUp(String username, String email, String password);
+  Future<Either<Failure, UserEntity>> signUp(String username, String email, String password, String phone);
   Future<void> accountDeletion();
 }
 
@@ -48,6 +48,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     String username,
     String email,
     String password,
+    String phone,
   ) async {
     try {
       final response = await client.auth.signUp(
@@ -66,6 +67,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         'email': user.email,
         'username': username,
         'avatar_url': null,
+        'phone': phone,
         'created_at': DateTime.now().toIso8601String(),
       });
 

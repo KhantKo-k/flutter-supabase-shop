@@ -21,13 +21,13 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   bool isEditing = false;
 
   @override
   void dispose() {
     _usernameController.dispose();
-    _emailController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -82,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildProfileDetail(ProfileEntity profile, BuildContext context) {
     if (!isEditing) {
       _usernameController.text = profile.username ?? '';
-      _emailController.text = profile.email;
+      _phoneController.text = profile.phone!;
     }
     return Card(
       margin: const EdgeInsets.all(16.0),
@@ -139,11 +139,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildPasswordFiled() {
     return TextField(
-      controller: _emailController,
-      enabled: false,
+      controller: _phoneController,
+      enabled: isEditing,
       decoration: InputDecoration(
         border: OutlineInputBorder(),
-        prefixIcon: Icon(Icons.email_outlined),
+        prefixIcon: Icon(Icons.phone_enabled),
       ),
     );
   }
@@ -167,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
           setState(() {
             isEditing = false;
             _usernameController.text = profile.username ?? '';
-            _emailController.text = profile.email;
+            _phoneController.text = profile.phone ?? '';
           });
         },
         child: const Text('Cancel'),
@@ -181,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
         onPressed: () {
           final updatedProfile = profile.copyWith(
             username: _usernameController.text,
-            email: _emailController.text,
+            phone: _phoneController.text,
           );
           context.read<ProfileBloc>().add(UpdateProfle(updatedProfile));
           setState(() {

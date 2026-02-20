@@ -4,11 +4,13 @@ class UserEntity {
   final String email;
   final String? username;
   final String? avatarUrl;
+  final String? phone;
 
   const UserEntity({
     required this.id,
     required this.email,
     this.username,
     this.avatarUrl,
+    this.phone,
   });
 }
