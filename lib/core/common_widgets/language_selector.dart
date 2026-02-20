@@ -17,7 +17,7 @@ class LanguageSelector extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.language, color: AppColors.primary),
+          Icon(Icons.language, ),
           const SizedBox(width: 4),
           // Text(
           //   currentLocale.languageCode.toUpperCase(),

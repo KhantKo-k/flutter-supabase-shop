@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_project/core/common_widgets/common_app_bar.dart';
 import 'package:shop_project/features/cart/domain/entities/cart_item.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_event.dart';
@@ -16,6 +17,7 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CommonAppBar(title: "Cart",),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
           if (state.items.isEmpty) {

@@ -123,5 +123,19 @@ class AppTheme {
         borderSide: const BorderSide(color: Color(0xFFFF6B6B)),
       ),
     ),
+
+    cardTheme: CardThemeData(
+    // color: const Color(0xFF1E293B), // Your dark slate color
+    elevation: 5,                  // Depth
+    shadowColor: const Color.fromARGB(255, 150, 126, 126),      // Shadow color
+    surfaceTintColor: Colors.white, // Prevents M3 from adding a purple tint
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(16),
+      side: const BorderSide(
+        color: Color.fromARGB(255, 209, 216, 226), // Subtle border to help it pop
+        width: 1,
+      ),
+    ),
+  ),
   );
 }

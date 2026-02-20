@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_project/core/common_widgets/common_app_bar.dart';
 import 'package:shop_project/core/theme/color_palette.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_event.dart';
@@ -39,7 +40,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Scaffold(
+      appBar: CommonAppBar(title: 'Profile'),
+      body: Column(
       children: [
         _buildProfileHeader(),
         Padding(
@@ -51,7 +54,9 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         _buildOrderHistory(),
       ],
+    ),
     );
+    
   }
 
   Widget _buildProfileHeader() {
