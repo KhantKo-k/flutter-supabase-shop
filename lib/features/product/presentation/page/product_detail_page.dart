@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/core/common_widgets/category_chip.dart';
+import 'package:shop_project/core/di/service_locator.dart';
+import 'package:shop_project/core/navigation/app_router.dart';
 import 'package:shop_project/features/cart/domain/entities/cart_item.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_event.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_state.dart';
+import 'package:shop_project/features/cart/routes.dart';
 import 'package:shop_project/features/product/domain/entities/product_entity.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -46,7 +49,53 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         final bool isInCart = cartItemIdex != -1;
 
         return Scaffold(
-          appBar: AppBar(title: Text('Product Details'), elevation: 0),
+          appBar: AppBar(
+            title: Text('Product Details'), 
+            elevation: 0,
+            actions: [
+              BlocBuilder<CartBloc, CartState>(
+                builder: (context, state) {
+                  final int totalItems = state.items.fold(0, (sum, item) => sum + item.quantity);
+
+                  if(totalItems == 0) {
+                     return const SizedBox.shrink();
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 16, top: 8),
+                    child: Stack(
+                      children: [
+                        IconButton(onPressed: (){
+                          _navigateToCart();
+                        }, 
+                        icon: Icon(Icons.shopping_cart_outlined),
+                        ),
+                        Positioned(
+                          right: 4,
+                          top: 4,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 18,
+                              minHeight: 18
+                            ),
+                            child: Text(
+                              '$totalItems',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+
+                },
+              )
+            ],),
           body: Stack(
             children: [
               SingleChildScrollView(
@@ -297,3 +346,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 }
+  void _navigateToCart() {
+    serviceLocator.get<AppRouter>().navigateToCart();
+  }

@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:shop_project/core/navigation/app_router.dart';
 import 'package:shop_project/features/cart/presentation/pages/cart_page.dart';
 
 class CartRoutes {
@@ -10,4 +11,9 @@ class CartRoutes {
       builder: (context, state) => const CartPage()
     ),
   ];
+}
+extension CartRoutesExtension on AppRouter{
+  void navigateToCart(){
+    router.go(CartRoutes.cart);
+  }
 }

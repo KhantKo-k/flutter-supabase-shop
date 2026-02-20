@@ -43,20 +43,28 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: CommonAppBar(title: 'Profile'),
       body: Column(
-      children: [
-        _buildProfileHeader(),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Text(
-            "Order Histroy",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        children: [
+          Stack(
+            children: [
+              Positioned(
+                top: 0,
+                right: 0,
+                child: Image.asset('assets/images/bubble7.png'),
+              ),
+              _buildProfileHeader(),
+            ],
           ),
-        ),
-        _buildOrderHistory(),
-      ],
-    ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Text(
+              "Order Histroy",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+          ),
+          _buildOrderHistory(),
+        ],
+      ),
     );
-    
   }
 
   Widget _buildProfileHeader() {
@@ -87,7 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildProfileDetail(ProfileEntity profile, BuildContext context) {
     if (!isEditing) {
       _usernameController.text = profile.username ?? '';
-      _phoneController.text = profile.phone!;
+      _phoneController.text = profile.phone ?? '';
     }
     return Card(
       margin: const EdgeInsets.all(16.0),
@@ -98,30 +106,31 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               children: [
                 _buildAvatar(),
-          
+
                 const SizedBox(height: 12),
-          
+
                 _buildUsernameField(),
-          
+
                 const SizedBox(height: 12),
-          
-                _buildPasswordFiled(),
-          
+
+                _buildPhoneField(),
+
                 const SizedBox(height: 12),
-                isEditing ? _buildCancelSaveButoons(profile) : _buildEditButton(),
+                isEditing
+                    ? _buildCancelSaveButoons(profile)
+                    : _buildEditButton(),
               ],
             ),
           ),
-
 
           Positioned(
             top: 4,
             right: 4,
             child: IconButton(
-            onPressed: () => _showProfileDeleteConfirmation(context),
-            icon: Icon(Icons.delete_outline, color: AppColors.error,)
+              onPressed: () => _showProfileDeleteConfirmation(context),
+              icon: Icon(Icons.delete_outline, color: AppColors.error),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -142,7 +151,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildPasswordFiled() {
+  Widget _buildPhoneField() {
     return TextField(
       controller: _phoneController,
       enabled: isEditing,
@@ -380,15 +389,16 @@ void _showDeleteConfirmation(BuildContext context, String orderId) {
   );
 }
 
-void _showProfileDeleteConfirmation(BuildContext context){
-    showDialog(context: context,
-     builder: (dialogContext) {
+void _showProfileDeleteConfirmation(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (dialogContext) {
       return AlertDialog(
         title: const Text('Confirm Delete'),
         content: const Text(
           'Are you sure you want to delete this profile? This cannot be undone.',
         ),
-         actions: [
+        actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: const Text('Cancel'),
@@ -405,6 +415,6 @@ void _showProfileDeleteConfirmation(BuildContext context){
           ),
         ],
       );
-     }
-    );
+    },
+  );
 }

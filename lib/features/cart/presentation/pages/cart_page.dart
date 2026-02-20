@@ -17,14 +17,34 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(title: "Cart",),
-      body: BlocBuilder<CartBloc, CartState>(
-        builder: (context, state) {
-          if (state.items.isEmpty) {
-            return _buildEmptyCart();
-          }
-          return _buildCartList(state, context);
-        },
+      appBar: CommonAppBar(title: "Cart"),
+      body: Stack(
+        children: [
+          Positioned(
+            top: -220,
+            left: -20,
+            child: Image.asset('assets/images/bubble4.png'),
+          ),
+
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Image.asset('assets/images/bubble7.png'),
+          ),
+          Positioned(
+            right: -20,
+            bottom: 120,
+            child: Image.asset('assets/images/bubble5.png'),
+          ),
+          BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              if (state.items.isEmpty) {
+                return _buildEmptyCart();
+              }
+              return _buildCartList(state, context);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -179,32 +199,29 @@ class CartPage extends StatelessWidget {
             height: 55,
             child: BlocConsumer<OrderBloc, OrderState>(
               listener: (context, orderState) {
-                switch(orderState.status) {
+                switch (orderState.status) {
                   case OrderStatus.initial:
                   case OrderStatus.loading:
                     break;
                   case OrderStatus.success:
                     context.read<CartBloc>().add(ClearCart());
                     ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        "Order placed successfully!",
-                      ),
-                    ),
-                  );
-                  break;
+                      SnackBar(content: Text("Order placed successfully!")),
+                    );
+                    break;
 
                   case OrderStatus.failure:
                     ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(orderState.failure?.message ?? 'Unknown error'),
-                    ),
-                  );
-                  break;
+                      SnackBar(
+                        content: Text(
+                          orderState.failure?.message ?? 'Unknown error',
+                        ),
+                      ),
+                    );
+                    break;
                   case OrderStatus.loaded:
                     break;
                 }
-
               },
               builder: (context, orderState) {
                 bool isPlacing = orderState.status == OrderStatus.loading;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/core/common_widgets/language_selector.dart';
-import 'package:shop_project/core/theme/color_palette.dart';
 import 'package:shop_project/core/theme/theme_cubit.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_event.dart';

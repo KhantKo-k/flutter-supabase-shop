@@ -37,25 +37,25 @@ class AppTheme {
 
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.secondary, // Your light blue background (0xFFF2F5FE)
+      fillColor: AppColors.secondary, 
       hintStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
 
-      // The border when the field is just sitting there
+    
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(
           color: Colors.transparent,
-        ), // Hidden border for a clean look
+        ), 
       ),
 
-      // The border when the user clicks into the field
+      
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
       ),
 
-      // The border when validation fails
+  
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: AppColors.error),
@@ -74,12 +74,12 @@ class AppTheme {
     colorScheme: const ColorScheme.dark(
       primary: Color(
         0xFF4D82FF,
-      ), // A slightly lighter blue for better dark contrast
-      secondary: Color(0xFF1E293B), // Darker slate instead of light blue
-      surface: Color(0xFF111827), // Match your textPrimary for deep dark feel
+      ), 
+      secondary: Color(0xFF1E293B), 
+      surface: Color(0xFF111827),
       background: Color(0xFF0F172A),
       error: Color(0xFFFF6B6B),
-      onSurface: Colors.white, // White text for dark mode
+      onSurface: Colors.white, 
       onSecondary: Colors.white70,
     ),
     appBarTheme: const AppBarTheme(
@@ -101,15 +101,13 @@ class AppTheme {
 
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: const Color(0xFF1E293B), // Darker gray/blue for the field box
-      //hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
+      fillColor: const Color(0xFF1E293B), 
       prefixIconColor: const Color(0xFF9CA3AF),
       suffixIconColor: const Color(0xFF9CA3AF),
       hintStyle: const TextStyle(color: Colors.white60),
       labelStyle: const TextStyle(color: Colors.white),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
 
-      // Border when the field is NOT focused
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: Color(0xFF334155)),
@@ -125,14 +123,13 @@ class AppTheme {
     ),
 
     cardTheme: CardThemeData(
-    // color: const Color(0xFF1E293B), // Your dark slate color
-    elevation: 5,                  // Depth
-    shadowColor: const Color.fromARGB(255, 150, 126, 126),      // Shadow color
-    surfaceTintColor: Colors.white, // Prevents M3 from adding a purple tint
+    elevation: 5,                  
+    shadowColor: const Color.fromARGB(255, 150, 126, 126),      
+    surfaceTintColor: Colors.white, 
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(16),
       side: const BorderSide(
-        color: Color.fromARGB(255, 209, 216, 226), // Subtle border to help it pop
+        color: Color.fromARGB(255, 209, 216, 226), 
         width: 1,
       ),
     ),
