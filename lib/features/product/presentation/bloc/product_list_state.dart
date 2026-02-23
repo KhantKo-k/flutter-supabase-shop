@@ -14,27 +14,35 @@ class ProductListState extends Equatable{
   final ProductListStatus status;
   final List<Product> products;
 
+  final List<String> categories;
+  final String? selectedCategory;
+
   final Failure? failure;
 
   const ProductListState({
     this.status = ProductListStatus.initial,
     this.products = const [],
+    this.categories = const [],
+    this.selectedCategory,
     this.failure,
   });
 
   @override
   List<Object?> get props =>
-    [status, products, failure];
+    [status, products, categories, selectedCategory, failure];
 
   ProductListState copyWith({
     ProductListStatus? status,
     List<Product>? products,
-    bool? hasReachMax,
+    List<String>? categories,
+    String? selectedCategory,
     Failure? failure,
   }) {
     return ProductListState(
       status: status ?? this.status,
       products: products ?? this.products,
+      categories: categories ?? this.categories,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
       failure: failure ?? this.failure,
     );
   }

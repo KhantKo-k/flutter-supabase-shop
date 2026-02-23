@@ -34,6 +34,7 @@ class ProductListPage extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         _buildSilverAppBar(context),
+        _buildsilverCategoryFilter(context, state),
         _buildSilverContent(context, state),
       ],
     );
@@ -96,6 +97,44 @@ class ProductListPage extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildsilverCategoryFilter(BuildContext context, ProductListState state){
+    if(state.categories.isEmpty){
+      return const SliverToBoxAdapter();
+    }
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: 56,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+          itemCount: state.categories.length,
+          separatorBuilder: (_, __) => const SizedBox(width: 8),
+          itemBuilder: (context, index) {
+            final category = state.categories[index];
+
+            final bool isSelected = (category == 'All' && state.selectedCategory == null) ||
+                                    (category == state.selectedCategory);
+            return ChoiceChip(
+              label: Text(category), 
+              selected: isSelected,
+              onSelected: state.status == ProductListStatus.loading
+              ? null
+              : (_) {
+                if(category == 'All'){
+                  context.read<ProductListBloc>()
+                  .add(ProductListFetched());
+                } else {
+                  context.read<ProductListBloc>()
+                  .add(FilterProductsByCategory(category));
+                }
+              },
+            );
+          }
+        ,),
       ),
     );
   }

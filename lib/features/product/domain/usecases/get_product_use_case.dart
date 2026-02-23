@@ -8,7 +8,7 @@ class GetProductUseCase {
 
   GetProductUseCase(this.repository);
 
-  Future<Either<Failure, List<Product> >> call() {
-    return repository.getProducts();
+  Future<Either<Failure, List<Product> >> call({String? category}) {
+    return repository.getProducts(category: category);
   }
 }

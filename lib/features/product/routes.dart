@@ -1,11 +1,10 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shop_project/core/di/service_locator.dart';
 import 'package:shop_project/core/navigation/app_router.dart';
 import 'package:shop_project/features/product/domain/entities/product_entity.dart';
+import 'package:shop_project/features/product/domain/usecases/get_categories_usecase.dart';
 import 'package:shop_project/features/product/domain/usecases/get_product_use_case.dart';
 import 'package:shop_project/features/product/presentation/bloc/product_list_bloc.dart';
 import 'package:shop_project/features/product/presentation/bloc/product_list_event.dart';
@@ -21,35 +20,37 @@ class ProductRoutes {
     GoRoute(
       path: products,
       builder: (context, state) => BlocProvider(
-        create: (_) => ProductListBloc(
-          getProducts: serviceLocator.get<GetProductUseCase>(),
-          )..add(ProductListFetched()),
-          child: const ProductListPage(),
-        ),
+        create: (_) =>
+            ProductListBloc(
+                getProducts: serviceLocator.get<GetProductUseCase>(),
+                getCategories: serviceLocator.get<GetCategoriesUsecase>(),
+              )
+              ..add(ProductListFetched())
+              ..add(FetchCategories()),
+        child: const ProductListPage(),
+      ),
     ),
   ];
-  
+
   static final routes = [
     GoRoute(
-  path: productDetail,
-  builder: (context, state) {
-    final product = state.extra as Product?;
+      path: productDetail,
+      builder: (context, state) {
+        final product = state.extra as Product?;
 
-    if (product == null) {
-      return const Scaffold(
-        body: Center(child: Text('Product not found')),
-      );
-    }
+        if (product == null) {
+          return const Scaffold(body: Center(child: Text('Product not found')));
+        }
 
-    return ProductDetailPage(product: product);
+        return ProductDetailPage(product: product);
 
-    // return BlocProvider(
-    //   key: ValueKey(product.id),
-    //   create: (_) => ProductDetailBloc(product: product),
-    //   child: const ProductDetailPage(),
-    // );
-  },
-)
+        // return BlocProvider(
+        //   key: ValueKey(product.id),
+        //   create: (_) => ProductDetailBloc(product: product),
+        //   child: const ProductDetailPage(),
+        // );
+      },
+    ),
 
     // GoRoute(
     //   path: productDetail,
@@ -66,14 +67,16 @@ class ProductRoutes {
   ];
 }
 
-extension ProductRoutesExtension on AppRouter{
-  void navigateToProducts(){
+extension ProductRoutesExtension on AppRouter {
+  void navigateToProducts() {
     router.go(ProductRoutes.products);
   }
 
-  void navigateToProductDetail(Product product){
+  void navigateToProductDetail(Product product) {
     serviceLocator.get<SelectedProductCubit>().setSelectedProduct(product);
-    router.push(ProductRoutes.productDetail.replaceFirst(':productId',product.id),
-    extra: product);
+    router.push(
+      ProductRoutes.productDetail.replaceFirst(':productId', product.id),
+      extra: product,
+    );
   }
 }
