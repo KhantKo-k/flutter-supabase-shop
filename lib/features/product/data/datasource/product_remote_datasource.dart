@@ -1,14 +1,12 @@
-import 'dart:io';
 
-import 'package:dartz/dartz.dart';
-import 'package:flutter/foundation.dart';
-import 'package:shop_project/core/error/failures.dart';
 import 'package:shop_project/features/product/data/model/product_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+
+
 abstract class ProductRemoteDatasource {
-  Future<Either<Failure, List<ProductModel>>> getProducts({String? category});
-  Future<Either<Failure, List<String>>> getCategories();
+  Future<List<ProductModel>> getProducts({String? category});
+  Future<List<String>> getCategories();
 }
 
 class ProductRemoteDatasourceImpl implements ProductRemoteDatasource {
@@ -17,14 +15,9 @@ class ProductRemoteDatasourceImpl implements ProductRemoteDatasource {
   ProductRemoteDatasourceImpl(this.client);
 
   @override
-  Future<Either<Failure, List<ProductModel>>> getProducts({
+  Future<List<ProductModel>> getProducts({
     String? category,
   }) async {
-    try {
-      // final response = await client
-      //   .from('products')
-      //   .select()
-      //   .order('created_at');
 
       var query = client.from('products').select();
 
@@ -34,29 +27,17 @@ class ProductRemoteDatasourceImpl implements ProductRemoteDatasource {
 
       final response = await query.order('created_at');
       if (response.isEmpty) {
-        return right([]); // Return empty list instead of failure
+        return []; // Return empty list instead of failure
       }
 
-      return right(
-        response.map((json) => ProductModel.fromJson(json)).toList(),
-      );
-    } on SocketException catch (_) {
-      return left(
-        const NetworkFailure('Please check your internet connection'),
-      );
-    } on PostgrestException catch (e) {
-      return left(SupabaseFailure('Database error: ${e.message}'));
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error fetching products: $e');
-      }
-      return left(const UnknownFailure('Something went wrong'));
-    }
+      return 
+        response.map((json) => ProductModel.fromJson(json)).toList();
+   
   }
 
   @override
-  Future<Either<Failure, List<String>>> getCategories() async {
-    try {
+  Future<List<String>> getCategories() async {
+    
       final response = await client.from('products').select('category');
 
       final categories = response
@@ -70,18 +51,7 @@ class ProductRemoteDatasourceImpl implements ProductRemoteDatasource {
           )
           .toList();
 
-      return right(categories);
-    } on SocketException catch (_) {
-      return left(
-        const NetworkFailure('Please check your internet connection'),
-      );
-    } on PostgrestException catch (e) {
-      return left(SupabaseFailure('Database error: ${e.message}'));
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error fetching categories: $e');
-      }
-      return left(const UnknownFailure('Something went wrong'));
-    }
+      return categories;
+   
   }
 }

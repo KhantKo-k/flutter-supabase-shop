@@ -119,11 +119,13 @@ class ProductListPage extends StatelessWidget {
             final bool isSelected = (category == 'All' && state.selectedCategory == null) ||
                                     (category == state.selectedCategory);
             return ChoiceChip(
+              key: ValueKey(category),
               label: Text(category), 
               selected: isSelected,
               onSelected: state.status == ProductListStatus.loading
               ? null
-              : (_) {
+              : (selected) {
+                if(isSelected) return;
                 if(category == 'All'){
                   context.read<ProductListBloc>()
                   .add(ProductListFetched());
