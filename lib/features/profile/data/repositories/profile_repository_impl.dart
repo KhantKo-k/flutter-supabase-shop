@@ -35,6 +35,7 @@ class ProfileRepositoryImpl implements ProfileRepository{
         ProfileModel(
           id: profile.id, 
           email: profile.email,
+          phone: profile.phone,
           username: profile.username,
           avatarUrl: profile.avatarUrl,
         )
