@@ -5,19 +5,19 @@ abstract class Failure{
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure(String message) : super(message);
+  const ServerFailure(super.message);
 }
 
 class AuthFailure extends Failure {
-  const AuthFailure(String message) : super(message);
+  const AuthFailure(super.message);
 }
 
 class NetworkFailure extends Failure {
-  const NetworkFailure(String message) : super(message);
+  const NetworkFailure(super.message);
 }
 
 class UnknownFailure extends Failure {
-  const UnknownFailure(String message) : super(message);
+  const UnknownFailure(super.message);
 }
 class DataNotFoundFailure extends Failure {
   const DataNotFoundFailure([String? message]) : super(message ?? 'Data not found');

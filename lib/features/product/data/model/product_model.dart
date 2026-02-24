@@ -9,33 +9,26 @@ part 'product_model.g.dart';
 class ProductModel extends Product {
   const ProductModel({
     @JsonKey(defaultValue: '')
-    required String id,
+    required super.id,
 
     @JsonKey(defaultValue: '')
-    required String name,
+    required super.name,
 
     @JsonKey(defaultValue: '')
-    required String category,
+    required super.category,
 
     @JsonKey(defaultValue: '')
-    required String description,
+    required super.description,
 
     @JsonKey(fromJson: _priceFromJson)
-    required double price,
+    required super.price,
 
     @JsonKey(
       name: 'image_url',
       defaultValue: 'https://via.placeholder.com/300',
     )
-    required String imageUrl,
-  }) : super(
-          id: id,
-          name: name,
-          price: price,
-          imageUrl: imageUrl,
-          category: category,
-          description: description,
-        );
+    required super.imageUrl,
+  });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       _$ProductModelFromJson(json);

@@ -77,7 +77,6 @@ class AppTheme {
       ), 
       secondary: Color(0xFF1E293B), 
       surface: Color(0xFF111827),
-      background: Color(0xFF0F172A),
       error: Color(0xFFFF6B6B),
       onSurface: Colors.white, 
       onSecondary: Colors.white70,

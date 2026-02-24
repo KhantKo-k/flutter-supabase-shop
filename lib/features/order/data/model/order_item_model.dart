@@ -5,21 +5,27 @@ import 'package:shop_project/features/order/domain/entity/order_item_entity.dart
 part 'order_item_model.g.dart';
 @JsonSerializable()
 class OrderItemModel extends OrderItemEntity{
+  @override
   @JsonKey(name: 'id')
   final String id;
 
+  @override
   @JsonKey(name: 'order_id')
   final String orderId;
 
+  @override
   @JsonKey(name: 'product_id')
   final String productId;
 
+  @override
   @JsonKey(name: 'product_name')
   final String productName;
 
+  @override
   @JsonKey(name: 'price')
   final double price;
 
+  @override
   @JsonKey(name: 'quantity')
   final int quantity;
 

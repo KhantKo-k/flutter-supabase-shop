@@ -49,9 +49,14 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource{
   
   @override
   Future<List<OrderModel>> getOrders() async {
+    final userId = client.auth.currentUser?.id;
+    if(userId == null){
+      throw AuthException('User unauthenticated');
+    }
     final response = await client
       .from('orders')
       .select()
+      .eq('user_id', userId)
       .order('created_at', ascending: false);
 
     return response.map((e)=> OrderModel.fromJson(e)).toList();
