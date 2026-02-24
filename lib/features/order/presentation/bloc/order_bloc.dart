@@ -35,7 +35,14 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   ) async {
     emit(state.copyWith(status: OrderStatus.loading, failure: null));
 
-    final result = await createOrder(event.totalAmount);
+    final result = await createOrder(
+      totalAmount: event.totalAmount,
+      receiverName: event.receiverName,
+      receiverPhone: event.receiverPhone,
+      address: event.address,
+      paymentMethod: event.paymentMethod,
+      description: event.description
+    );
 
     await result.fold(
       (failure) async {

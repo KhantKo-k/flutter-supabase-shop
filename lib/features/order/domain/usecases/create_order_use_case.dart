@@ -8,7 +8,21 @@ class CreateOrderUseCase {
 
   CreateOrderUseCase(this.repository);
 
-  Future<Either<Failure, String>> call(double totalAmount) {
-    return repository.createOrder(totalAmount: totalAmount);
+  Future<Either<Failure, String>> call({
+    required double totalAmount,
+    required String receiverName,
+    required String receiverPhone,
+    required String address,
+    required String paymentMethod,
+    String? description,
+  }) {
+    return repository.createOrder(
+      totalAmount: totalAmount,
+      receiverName: receiverName,
+      receiverPhone: receiverPhone,
+      address: address,
+      paymentMethod: paymentMethod,
+      description: description,
+    );
   }
 }

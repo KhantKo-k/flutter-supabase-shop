@@ -10,6 +10,7 @@ import 'package:shop_project/features/order/domain/usecases/delete_order_use_cas
 import 'package:shop_project/features/order/domain/usecases/get_my_orders_use_case.dart';
 import 'package:shop_project/features/order/domain/usecases/get_order_items_use_case.dart';
 import 'package:shop_project/features/order/presentation/bloc/order_bloc.dart';
+import 'package:shop_project/features/order/presentation/cubit/address_cubit.dart';
 
 void injectOrderRemoteDatasources(){
   serviceLocator.registerLazySingleton<OrderRemoteDatasource>(
@@ -53,6 +54,11 @@ void injectOrderBloc(){
       getMyOrders: serviceLocator(), 
       getOrderItems: serviceLocator(),
       deleteOrder: serviceLocator(),
+    )
+  );
+  serviceLocator.registerLazySingleton(
+    () => AddressCubit(
+      serviceLocator()
     )
   );
 }

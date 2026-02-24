@@ -6,6 +6,11 @@ import 'package:shop_project/features/order/domain/entity/order_item_entity.dart
 abstract class OrderRepository {
   Future<Either<Failure, String>> createOrder({
     required double totalAmount,
+    required String receiverName,
+    required String receiverPhone,
+    required String address,
+    required String paymentMethod,
+    String? description,
   });
 
   Future<Either<Failure, void>> addOrderItems({

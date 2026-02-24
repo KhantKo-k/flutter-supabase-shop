@@ -2,10 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/core/common_widgets/common_app_bar.dart';
+import 'package:shop_project/core/di/service_locator.dart';
+import 'package:shop_project/core/navigation/app_router.dart';
 import 'package:shop_project/features/cart/domain/entities/cart_item.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_event.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_state.dart';
+import 'package:shop_project/features/cart/routes.dart';
 import 'package:shop_project/features/order/domain/entity/order_item_entity.dart';
 import 'package:shop_project/features/order/presentation/bloc/order_bloc.dart';
 import 'package:shop_project/features/order/presentation/bloc/order_event.dart';
@@ -197,68 +200,77 @@ class CartPage extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: 55,
-            child: BlocConsumer<OrderBloc, OrderState>(
-              listener: (context, orderState) {
-                switch (orderState.status) {
-                  case OrderStatus.initial:
-                  case OrderStatus.loading:
-                    break;
-                  case OrderStatus.success:
-                    context.read<CartBloc>().add(ClearCart());
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Order placed successfully!")),
-                    );
-                    break;
-
-                  case OrderStatus.failure:
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          orderState.failure?.message ?? 'Unknown error',
-                        ),
-                      ),
-                    );
-                    break;
-                  case OrderStatus.loaded:
-                    break;
-                }
-              },
-              builder: (context, orderState) {
-                bool isPlacing = orderState.status == OrderStatus.loading;
-
-                return ElevatedButton(
-                  onPressed: isPlacing
-                      ? null
-                      : () {
-                          final orderItems = state.items
-                              .map(
-                                (cartItem) => OrderItemEntity(
-                                  id: '',
-                                  orderId: '',
-                                  productId: cartItem.productId,
-                                  productName: cartItem.name,
-                                  price: cartItem.price,
-                                  quantity: cartItem.quantity,
-                                ),
-                              )
-                              .toList();
-
-                          context.read<OrderBloc>().add(
-                            PlaceOrderRequested(
-                              items: orderItems,
-                              totalAmount: state.totalPrice,
-                            ),
-                          );
-                        },
-                  child: isPlacing
-                      ? const CircularProgressIndicator()
-                      : const Text('Order now'),
-                );
-              },
+            child: ElevatedButton(onPressed: ()
+            {
+              _navigateToCheckout(state.items, state.totalPrice);
+            }, child: const Text('Proceed to Checkout'),
             ),
+            // child: BlocConsumer<OrderBloc, OrderState>(
+            //   listener: (context, orderState) {
+            //     switch (orderState.status) {
+            //       case OrderStatus.initial:
+            //       case OrderStatus.loading:
+            //         break;
+            //       case OrderStatus.success:
+            //         context.read<CartBloc>().add(ClearCart());
+            //         ScaffoldMessenger.of(context).showSnackBar(
+            //           SnackBar(content: Text("Order placed successfully!")),
+            //         );
+            //         break;
+
+            //       case OrderStatus.failure:
+            //         ScaffoldMessenger.of(context).showSnackBar(
+            //           SnackBar(
+            //             content: Text(
+            //               orderState.failure?.message ?? 'Unknown error',
+            //             ),
+            //           ),
+            //         );
+            //         break;
+            //       case OrderStatus.loaded:
+            //         break;
+            //     }
+            //   },
+            //   builder: (context, orderState) {
+            //     bool isPlacing = orderState.status == OrderStatus.loading;
+
+            //     return ElevatedButton(
+            //       onPressed: isPlacing
+            //           ? null
+            //           : () {
+            //               final orderItems = state.items
+            //                   .map(
+            //                     (cartItem) => OrderItemEntity(
+            //                       id: '',
+            //                       orderId: '',
+            //                       productId: cartItem.productId,
+            //                       productName: cartItem.name,
+            //                       price: cartItem.price,
+            //                       quantity: cartItem.quantity,
+            //                     ),
+            //                   )
+            //                   .toList();
+
+            //               context.read<OrderBloc>().add(
+            //                 PlaceOrderRequested(
+            //                   items: orderItems,
+            //                   totalAmount: state.totalPrice,
+            //                 ),
+            //               );
+            //             },
+            //       child: isPlacing
+            //           ? const CircularProgressIndicator()
+            //           : const Text('Order now'),
+            //     );
+            //   },
+            // ),
           ),
         ],
       ),
     );
+  }
+
+  void _navigateToCheckout(List<CartItem> items, double totalAmount){
+    serviceLocator.get<AppRouter>().navigateToCheckout(items: items, totalAmount: totalAmount);
   }
 }

@@ -18,7 +18,7 @@ class OrderModel extends OrderEntity{
   final String status;
 
   @override
-  @JsonKey(name: 'total_amount')
+  @JsonKey(name: 'total_amount', fromJson: _toDouble)
   final double totalAmount;
 
   @override
@@ -29,6 +29,26 @@ class OrderModel extends OrderEntity{
   @JsonKey(name: 'order_display_id')
   final String orderDisplayId;
 
+  @override
+  @JsonKey(name: 'address')
+  final String address;
+
+  @override
+  @JsonKey(name: 'payment_method')
+  final String paymentMethod;
+
+  @override
+  @JsonKey(name: 'receiver_name')
+  final String receiverName;
+
+  @override
+  @JsonKey(name: 'receiver_phone')
+  final String receiverPhone;
+
+  @override
+  @JsonKey(name: 'description', includeIfNull: true)
+  final String? description;
+
   const OrderModel({
     required this.id,
     required this.userId,
@@ -36,6 +56,11 @@ class OrderModel extends OrderEntity{
     required this.totalAmount,
     required this.createdAt,
     required this.orderDisplayId,
+    required this.address,
+    required this.paymentMethod,
+    required this.receiverName,
+    required this.receiverPhone,
+    this.description,
   }) : super( 
     id: id,
     userId: userId,
@@ -43,10 +68,17 @@ class OrderModel extends OrderEntity{
     totalAmount: totalAmount,
     createdAt: createdAt,
     orderDisplayId: orderDisplayId,
+    address: address,
+    paymentMethod: paymentMethod,
+    receiverName: receiverName,
+    receiverPhone: receiverPhone,
+    description: description,
   );
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
     _$OrderModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$OrderModelToJson(this);
+
+  static double _toDouble(dynamic val) => (val as num).toDouble();
 }

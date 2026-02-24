@@ -234,9 +234,9 @@ class _ProfilePageState extends State<ProfilePage> {
               return _buildErrorState(state.failure!.message);
 
             case OrderStatus.success:
-              break;
+              return _buildOrderList(state.orders);
           }
-          return const Center(child: Text("No orders yet!"));
+          
         },
       ),
     );

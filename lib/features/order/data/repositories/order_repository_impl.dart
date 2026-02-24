@@ -18,9 +18,21 @@ class OrderRepositoryImpl implements OrderRepository{
   @override
   Future<Either<Failure, String>> createOrder({
     required double totalAmount,
+    required String receiverName,
+    required String receiverPhone,
+    required String address,
+    required String paymentMethod,
+    String? description,
   }) async {
     try{
-      final orderId = await datasource.createOrder(totalAmount);
+      final orderId = await datasource.createOrder(
+        totalAmount: totalAmount,
+        receiverName: receiverName,
+        receiverPhone: receiverPhone,
+        address: address,
+        paymentMethod: paymentMethod,
+        description: description,
+      );
       return Right(orderId);
     } on AuthException{
       return Left(AuthFailure(FailureMessages.invalidCredentials));
