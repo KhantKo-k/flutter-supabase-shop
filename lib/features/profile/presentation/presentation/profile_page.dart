@@ -5,6 +5,7 @@ import 'package:shop_project/core/theme/color_palette.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_event.dart';
 import 'package:shop_project/features/order/domain/entity/order_entity.dart';
+import 'package:shop_project/features/order/domain/entity/order_item_entity.dart';
 import 'package:shop_project/features/order/presentation/bloc/order_bloc.dart';
 import 'package:shop_project/features/order/presentation/bloc/order_event.dart';
 import 'package:shop_project/features/order/presentation/bloc/order_state.dart';
@@ -236,7 +237,6 @@ class _ProfilePageState extends State<ProfilePage> {
             case OrderStatus.success:
               return _buildOrderList(state.orders);
           }
-          
         },
       ),
     );
@@ -262,7 +262,7 @@ class _ProfilePageState extends State<ProfilePage> {
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
             context.read<OrderBloc>().add(LoadOrderItems(order.id));
-            _showOrderDetailSheet(context, order.id);
+            _showOrderDetailSheet(context, order);
           },
         );
       },
@@ -270,87 +270,194 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-void _showOrderDetailSheet(BuildContext context, String orderId) {
+void _showOrderDetailSheet(BuildContext context, OrderEntity order) {
+  Widget buildReceiptHeader(OrderEntity order) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Order Pay Slip',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                order.status.toUpperCase(),
+                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text("Order ID: #${order.orderDisplayId}"),
+        const SizedBox(height: 16),
+        const Text(
+          "DELIVERY ADDRESS",
+          style: TextStyle(letterSpacing: 1.2, fontWeight: FontWeight.bold),
+        ),
+        Text(order.address),
+      ],
+    );
+  }
+
+  Widget buildPriceRow(String label, String value, {bool isBold = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: isBold ? 18 : 14,
+              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: isBold ? 18 : 14,
+              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildItemList(List<OrderItemEntity> items) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            children: [
+              Text(
+                "${item.quantity}x",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 12),
+              Expanded(child: Text(item.productName)),
+              Text("\$${(item.price * item.quantity).toStringAsFixed(2)}"),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
+    //backgroundColor: Colors.transparent,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (sheetContext) {
       return DraggableScrollableSheet(
-        initialChildSize: 0.6,
+        initialChildSize: 0.7,
         maxChildSize: 0.9,
+        minChildSize: 0.5,
         expand: false,
         builder: (_, scrollController) {
-          return BlocBuilder<OrderBloc, OrderState>(
-            builder: (context, state) {
-              switch (state.status) {
-                case OrderStatus.initial:
-                case OrderStatus.loading:
-                  return const Center(child: CircularProgressIndicator());
-                case OrderStatus.loaded:
-                case OrderStatus.success:
-                  final items = state.orderItems;
-                  if (items.isEmpty) {
-                    return const Center(
-                      child: Text('No itmes found for this order'),
+          return Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            ),
+            child: BlocBuilder<OrderBloc, OrderState>(
+              builder: (context, state) {
+                switch (state.status) {
+                  case OrderStatus.initial:
+                  case OrderStatus.loading:
+                    return const Center(child: CircularProgressIndicator());
+                  case OrderStatus.loaded:
+                  case OrderStatus.success:
+                    final items = state.orderItems;
+                    if (items.isEmpty) {
+                      return const Center(
+                        child: Text('No itmes found for this order'),
+                      );
+                    }
+                    final subTotal = items.fold(
+                      0.0,
+                      (sum, item) => sum + (item.price * item.quantity),
                     );
-                  }
+                    return SingleChildScrollView(
+                      controller: scrollController,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 12),
+                          SizedBox(width: 40, height: 4),
+                          Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Column(
+                              children: [
+                                buildReceiptHeader(order),
+                                const SizedBox(height: 24),
 
-                  return Column(
-                    children: [
-                      const SizedBox(height: 12),
-                      SizedBox(width: 40, height: 4),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          'Order Items',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ),
-                      Expanded(
-                        child: ListView.separated(
-                          controller: scrollController,
-                          itemCount: items.length,
-                          separatorBuilder: (_, __) => const Divider(),
-                          itemBuilder: (context, index) {
-                            final item = items[index];
-                            return ListTile(
-                              title: Text(item.productName),
-                              subtitle: Text(
-                                "Qty: ${item.quantity} x \$${item.price}",
-                              ),
-                              trailing: Text(
-                                '\$${(item.quantity * item.price).toStringAsFixed(2)}',
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: ElevatedButton.icon(
-                            onPressed: () =>
-                                _showDeleteConfirmation(context, orderId),
-                            label: const Text('Delete this order?'),
-                            icon: const Icon(Icons.delete_outline),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.error,
-                              foregroundColor: Colors.white,
+                                const Text(
+                                  'ITEMS',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                                const Divider(),
+                                buildItemList(items),
+                                const SizedBox(height: 16),
+                                const DashedDivider(),
+                                const SizedBox(height: 16),
+                                buildPriceRow(
+                                  "Subtotal",
+                                  "\$${subTotal.toStringAsFixed(2)}",
+                                ),
+                                buildPriceRow("Delivery Fee", "Free"),
+                                const Divider(height: 32),
+                                buildPriceRow(
+                                  "Total Amount",
+                                  "\$${subTotal.toStringAsFixed(2)}",
+                                  isBold: true,
+                                ),
+
+                                const SizedBox(height: 32),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () => _showDeleteConfirmation(
+                                      context,
+                                      order.id,
+                                    ),
+                                    label: const Text('Delete this order?'),
+                                    icon: const Icon(Icons.delete_outline),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.error,
+                                      foregroundColor: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  );
-                case OrderStatus.failure:
-                  return Center(child: Text(state.failure!.message));
-              }
-            },
+                    );
+                  case OrderStatus.failure:
+                    return Center(child: Text(state.failure!.message));
+                }
+              },
+            ),
           );
         },
       );
@@ -417,4 +524,32 @@ void _showProfileDeleteConfirmation(BuildContext context) {
       );
     },
   );
+}
+
+class DashedDivider extends StatelessWidget {
+  const DashedDivider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final boxWidth = constraints.constrainWidth();
+        const dashWidth = 5.0;
+        final dashCount = (boxWidth / (2 * dashWidth)).floor();
+        return Flex(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          direction: Axis.horizontal,
+          children: List.generate(dashCount, (_) {
+            return const SizedBox(
+              width: dashWidth,
+              height: 1,
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: Colors.grey),
+              ),
+            );
+          }),
+        );
+      },
+    );
+  }
 }

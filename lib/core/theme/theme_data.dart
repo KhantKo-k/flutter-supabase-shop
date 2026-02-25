@@ -96,8 +96,6 @@ class AppTheme {
 
     textTheme: const TextTheme(titleMedium: TextStyle(color: Colors.white)),
 
-    
-
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: const Color(0xFF1E293B), 

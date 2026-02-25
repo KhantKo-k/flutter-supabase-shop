@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/core/di/service_locator.dart';
+import 'package:shop_project/core/theme/color_palette.dart';
 import 'package:shop_project/features/cart/domain/entities/cart_item.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_event.dart';
@@ -138,6 +139,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget _buildCityDropdowns() {
     return BlocBuilder<AddressCubit, AddressState>(
       builder: (context, state) => _buildSearchableField(
+        context: context,
         label: "City",
         value: state.selectedCity ?? "Select City",
         onTap: () => _showSearchModal(context, "City"),
@@ -149,6 +151,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget _buildStreetDropdowns() {
     return BlocBuilder<AddressCubit, AddressState>(
       builder: (context, state) => _buildSearchableField(
+        context: context,
         label: "Street",
         value: state.selectedStreet ?? "Select Street",
         onTap: state.selectedCity == null
@@ -160,11 +163,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   Widget _buildSearchableField({
+    required BuildContext context,
     required String label,
     required String value,
     VoidCallback? onTap,
     required IconData icon,
   }) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -172,7 +178,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Colors.grey[300],
+          color: isDarkMode
+              ? const Color.fromARGB(255, 36, 45, 61)
+              : AppColors.secondary,
+
+          border: Border.all(
+            color: isDarkMode
+                ? const Color.fromARGB(26, 229, 212, 212)
+                : Colors.black12,
+          ),
         ),
         child: Row(
           children: [
