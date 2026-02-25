@@ -1,52 +1,52 @@
 
+// ignore_for_file: overridden_fields
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shop_project/features/order/domain/entity/order_entity.dart';
 
 part 'order_model.g.dart';
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class OrderModel extends OrderEntity{
-  @override
+
   @JsonKey(name: 'id')
   final String id;
 
-  @override
+
   @JsonKey(name: 'user_id')
   final String userId;
 
-  @override
+
   @JsonKey(name: 'status')
   final String status;
 
-  @override
+
   @JsonKey(name: 'total_amount', fromJson: _toDouble)
   final double totalAmount;
 
-  @override
+
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
 
-  @override
+
   @JsonKey(name: 'order_display_id')
   final String orderDisplayId;
 
-  @override
   @JsonKey(name: 'address')
   final String address;
 
-  @override
   @JsonKey(name: 'payment_method')
   final String paymentMethod;
 
-  @override
+
   @JsonKey(name: 'receiver_name')
   final String receiverName;
 
-  @override
+
   @JsonKey(name: 'receiver_phone')
   final String receiverPhone;
 
-  @override
-  @JsonKey(name: 'description', includeIfNull: true)
+
+  @JsonKey(name: 'description')
   final String? description;
 
   const OrderModel({

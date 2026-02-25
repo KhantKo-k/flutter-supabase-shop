@@ -32,5 +32,5 @@ Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
       'payment_method': instance.paymentMethod,
       'receiver_name': instance.receiverName,
       'receiver_phone': instance.receiverPhone,
-      'description': instance.description,
+      'description': ?instance.description,
     };

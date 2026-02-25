@@ -9,10 +9,6 @@ import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_event.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_state.dart';
 import 'package:shop_project/features/cart/routes.dart';
-import 'package:shop_project/features/order/domain/entity/order_item_entity.dart';
-import 'package:shop_project/features/order/presentation/bloc/order_bloc.dart';
-import 'package:shop_project/features/order/presentation/bloc/order_event.dart';
-import 'package:shop_project/features/order/presentation/bloc/order_state.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
