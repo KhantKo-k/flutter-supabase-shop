@@ -61,13 +61,22 @@ class _PasswordPageState extends State<PasswordPage> {
             });
           });
         }
-        
+        // if(state is LoginLoading){
+        //   return;
+        // }
       },
       child: Builder(
         builder: (context) {
-          final isLoading = context.select(
-            (AuthBloc bloc) => bloc.state is LoginLoading,
-          );
+          final authState = context.watch<AuthBloc>().state;
+          if(authState is Authenticated){
+            return const Scaffold(
+              //body: SizedBox.shrink(),
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+          final isLoading = authState is LoginLoading;
           return PopScope(
             canPop: !isLoading,
             child: Scaffold(
@@ -111,14 +120,8 @@ class _PasswordPageState extends State<PasswordPage> {
             _buildPasswordDots(),
 
             _buildHiddenPasswordField(),
-
             Spacer(),
-
-            //SizedBox(height: MediaQuery.sizeOf(context).height * 0.42),
-
             _buildCancelButton(l10n),
-
-            // SizedBox(height: 30),
           ],
         ),
       ),
@@ -135,7 +138,7 @@ class _PasswordPageState extends State<PasswordPage> {
 
   Widget _buildWelcomeText(AppLocalizations l10n) {
     final state = context.watch<AuthBloc>().state;
-    final username = state.username ?? "User";
+    final username = state.username;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 30),
       child: Column(

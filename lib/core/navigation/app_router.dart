@@ -29,6 +29,8 @@ class AppRouter {
           final authState = authBloc.state;
           final isAuthenticated = authState is Authenticated;
 
+          if (authState is LoginLoading) return null;
+
           final identity = authLocalStorage.getIdentity();
           final hasIdentity = identity != null;
 

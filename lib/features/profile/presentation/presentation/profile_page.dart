@@ -439,7 +439,7 @@ void _showOrderDetailSheet(BuildContext context, OrderEntity order) {
                                       context,
                                       order.id,
                                     ),
-                                    label: const Text('Delete this order?'),
+                                    label: const Text('Delete'),
                                     icon: const Icon(Icons.delete_outline),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.error,

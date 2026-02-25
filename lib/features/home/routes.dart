@@ -34,24 +34,16 @@ class HomeRoutes {
           navigatorKey: _cartNavigatorKey,
           routes: [
             ...CartRoutes.shellroutes,
-            // GoRoute(
-            //   path: cart,
-            //   builder: (context, state) => const ChildPage(pageName: 'Cart'),
-            // ),
           ],
         ),
         StatefulShellBranch(
           navigatorKey: _profileNavigatorKey,
           routes: [
             ...ProfileRoutes.shellRoutes,
-            // GoRoute(
-            //   path: profile,
-            //   builder: (context, state) => const ChildPage(pageName: 'Profile'),
-            // ),
+
           ],
         ),
       ],
     ),
-    // GoRoute(path: home, builder: (context, state) => const HomePage()),
   ];
 }

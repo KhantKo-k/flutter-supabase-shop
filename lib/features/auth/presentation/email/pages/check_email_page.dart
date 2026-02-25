@@ -44,7 +44,6 @@ class _CheckEmailPageState extends State<CheckEmailPage> {
 
         if (state is EmailSuccess) {
           context.read<AuthBloc>().add(AuthPrefillRequested(state.profile));
-          //_navigateToPassword();
         }
       },
       child: Builder(
@@ -137,7 +136,6 @@ class _CheckEmailPageState extends State<CheckEmailPage> {
       controller: _emailController,
       decoration: InputDecoration(
         filled: true,
-        // fillColor: AppColors.secondary,
         labelText: l10n.email,
         labelStyle: const TextStyle(
           color: AppColors.textSecondary,
@@ -216,9 +214,4 @@ class _CheckEmailPageState extends State<CheckEmailPage> {
       ),
     );
   }
-
-  // void _navigateToPassword() {
-  //   debugPrint('Pressing login');
-  //   serviceLocator.get<AppRouter>().navigateToPassword();
-  // }
 }
