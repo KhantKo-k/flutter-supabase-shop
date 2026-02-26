@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/core/common_widgets/category_chip.dart';
 import 'package:shop_project/core/di/service_locator.dart';
+import 'package:shop_project/core/localization/l10n/app_localizations.dart';
 import 'package:shop_project/core/navigation/app_router.dart';
 import 'package:shop_project/features/cart/domain/entities/cart_item.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
@@ -47,10 +48,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           (item) => item.productId == widget.product.id,
         );
         final bool isInCart = cartItemIdex != -1;
+        final l10n = AppLocalizations.of(context);
 
         return Scaffold(
           appBar: AppBar(
-            title: Text('Product Details'), 
+            title: Text(l10n.productDetail), 
+            centerTitle: true,
             elevation: 0,
             actions: [
               BlocBuilder<CartBloc, CartState>(
@@ -104,7 +107,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   children: [
                     _buildProductImage(widget.product.imageUrl, context),
                     _buildProductInfo(widget.product),
-                    _buildQuantitySelector(isInCart, _localQuantity, context),
+                    _buildQuantitySelector(isInCart, _localQuantity, context, l10n),
                     SizedBox(height: 100),
                   ],
                 ),
@@ -118,6 +121,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       _localQuantity,
                       context,
                       isLoading,
+                      l10n
                     ),
                 // : SizedBox.shrink(),
               ),
@@ -206,6 +210,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     bool isInCart,
     int quantity,
     BuildContext context,
+    AppLocalizations l10n
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -245,7 +250,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Total Price', style: TextStyle(color: Colors.grey)),
+                Text(l10n.totalAmount, style: TextStyle(color: Colors.grey)),
                 Text(
                   '\$${(widget.product.price * _localQuantity).toStringAsFixed(2)}',
                   style: const TextStyle(
@@ -276,6 +281,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     int quantity,
     BuildContext context,
     bool isLoading,
+    AppLocalizations l10n
   ) {
     return Container(
       padding: const EdgeInsets.all(24),
@@ -323,7 +329,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   Opacity(
                     opacity: isLoading ? 0 : 1,
                     child: Text(
-                      isInCart ? 'Update to Cart' : 'Add to Cart',
+                      isInCart ? l10n.updateCart : l10n.addToCart,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

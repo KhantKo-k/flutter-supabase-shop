@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/core/common_widgets/common_app_bar.dart';
+import 'package:shop_project/core/localization/l10n/app_localizations.dart';
 import 'package:shop_project/core/theme/color_palette.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_event.dart';
@@ -41,8 +42,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: CommonAppBar(title: 'Profile'),
+      appBar: CommonAppBar(title: l10n.profile),
       body: Column(
         children: [
           Stack(
@@ -58,11 +60,11 @@ class _ProfilePageState extends State<ProfilePage> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              "Order Histroy",
+              l10n.myOrders,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
           ),
-          _buildOrderHistory(),
+          _buildOrderHistory(l10n),
         ],
       ),
     );
@@ -72,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
         if (state is ProfileLoading) {
-          return const CircularProgressIndicator();
+          return SizedBox.shrink();
         }
 
         if (state is ProfileError) {
@@ -98,6 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
       _usernameController.text = profile.username ?? '';
       _phoneController.text = profile.phone ?? '';
     }
+    final l10n = AppLocalizations.of(context);
     return Card(
       margin: const EdgeInsets.all(16.0),
       child: Stack(
@@ -118,8 +121,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
                 const SizedBox(height: 12),
                 isEditing
-                    ? _buildCancelSaveButoons(profile)
-                    : _buildEditButton(),
+                    ? _buildCancelSaveButoons(profile,l10n)
+                    : _buildEditButton(l10n),
               ],
             ),
           ),
@@ -128,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
             top: 4,
             right: 4,
             child: IconButton(
-              onPressed: () => _showProfileDeleteConfirmation(context),
+              onPressed: () => _showProfileDeleteConfirmation(context,l10n),
               icon: Icon(Icons.delete_outline, color: AppColors.error),
             ),
           ),
@@ -163,19 +166,19 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildCancelSaveButoons(ProfileEntity profile) {
+  Widget _buildCancelSaveButoons(ProfileEntity profile, AppLocalizations l10n) {
     return Row(
       children: [
-        _buildCancelButton(profile),
+        _buildCancelButton(profile, l10n.cancel),
 
         const SizedBox(width: 12),
 
-        _buildSaveButton(profile),
+        _buildSaveButton(profile, l10n.save),
       ],
     );
   }
 
-  Widget _buildCancelButton(ProfileEntity profile) {
+  Widget _buildCancelButton(ProfileEntity profile, String cancel) {
     return Expanded(
       child: OutlinedButton(
         onPressed: () {
@@ -185,12 +188,12 @@ class _ProfilePageState extends State<ProfilePage> {
             _phoneController.text = profile.phone ?? '';
           });
         },
-        child: const Text('Cancel'),
+        child: Text(cancel),
       ),
     );
   }
 
-  Widget _buildSaveButton(ProfileEntity profile) {
+  Widget _buildSaveButton(ProfileEntity profile, String save) {
     return Expanded(
       child: OutlinedButton(
         onPressed: () {
@@ -203,13 +206,13 @@ class _ProfilePageState extends State<ProfilePage> {
             isEditing = false;
           });
         },
-        child: const Text('Save'),
+        child: Text(save),
         //label: const Text('Update Profile'),
       ),
     );
   }
 
-  Widget _buildEditButton() {
+  Widget _buildEditButton(AppLocalizations l10n) {
     return ElevatedButton.icon(
       onPressed: () {
         setState(() {
@@ -217,11 +220,11 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       },
       icon: const Icon(Icons.edit),
-      label: const Text('Edit Profile'),
+      label: Text(l10n.editProfile),
     );
   }
 
-  Widget _buildOrderHistory() {
+  Widget _buildOrderHistory(AppLocalizations l10n) {
     return Expanded(
       child: BlocBuilder<OrderBloc, OrderState>(
         builder: (context, state) {
@@ -230,12 +233,12 @@ class _ProfilePageState extends State<ProfilePage> {
             case OrderStatus.loading:
               return _buildLoadingIndicator();
             case OrderStatus.loaded:
-              return _buildOrderList(state.orders);
+              return _buildOrderList(state.orders, l10n);
             case OrderStatus.failure:
               return _buildErrorState(state.failure!.message);
 
             case OrderStatus.success:
-              return _buildOrderList(state.orders);
+              return _buildOrderList(state.orders, l10n);
           }
         },
       ),
@@ -250,19 +253,19 @@ class _ProfilePageState extends State<ProfilePage> {
     return Center(child: Text(message));
   }
 
-  Widget _buildOrderList(List<OrderEntity> orders) {
+  Widget _buildOrderList(List<OrderEntity> orders, AppLocalizations l10n) {
     return ListView.builder(
       itemCount: orders.length,
       itemBuilder: (context, index) {
         final order = orders[index];
         return ListTile(
           leading: const Icon(Icons.receipt_long),
-          title: Text("Order #${order.orderDisplayId}"),
-          subtitle: Text("Total : \$${order.orderDisplayId}"),
+          title: Text("${l10n.order} ${order.orderDisplayId}"),
+          subtitle: Text("${l10n.total} : \$${order.totalAmount}"),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
             context.read<OrderBloc>().add(LoadOrderItems(order.id));
-            _showOrderDetailSheet(context, order);
+            _showOrderDetailSheet(context, order, l10n);
           },
         );
       },
@@ -270,7 +273,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-void _showOrderDetailSheet(BuildContext context, OrderEntity order) {
+void _showOrderDetailSheet(BuildContext context, OrderEntity order, AppLocalizations l10n) {
   Widget buildReceiptHeader(OrderEntity order) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,9 +281,9 @@ void _showOrderDetailSheet(BuildContext context, OrderEntity order) {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Order Pay Slip',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+             Text(
+              l10n.orderSlip,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -296,10 +299,10 @@ void _showOrderDetailSheet(BuildContext context, OrderEntity order) {
           ],
         ),
         const SizedBox(height: 8),
-        Text("Order ID: #${order.orderDisplayId}"),
+        Text("${l10n.orderId}: ${order.orderDisplayId}"),
         const SizedBox(height: 16),
-        const Text(
-          "DELIVERY ADDRESS",
+        Text(
+          l10n.deliveryAddress,
           style: TextStyle(letterSpacing: 1.2, fontWeight: FontWeight.bold),
         ),
         Text(order.address),
@@ -406,8 +409,8 @@ void _showOrderDetailSheet(BuildContext context, OrderEntity order) {
                                 buildReceiptHeader(order),
                                 const SizedBox(height: 24),
 
-                                const Text(
-                                  'ITEMS',
+                                 Text(
+                                  l10n.items,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     letterSpacing: 1.2,
@@ -419,13 +422,13 @@ void _showOrderDetailSheet(BuildContext context, OrderEntity order) {
                                 const DashedDivider(),
                                 const SizedBox(height: 16),
                                 buildPriceRow(
-                                  "Subtotal",
+                                  l10n.subtotal,
                                   "\$${subTotal.toStringAsFixed(2)}",
                                 ),
-                                buildPriceRow("Delivery Fee", "Free"),
+                                buildPriceRow(l10n.deliveryFee, l10n.free),
                                 const Divider(height: 32),
                                 buildPriceRow(
-                                  "Total Amount",
+                                  l10n.totalAmount,
                                   "\$${subTotal.toStringAsFixed(2)}",
                                   isBold: true,
                                 ),
@@ -438,8 +441,9 @@ void _showOrderDetailSheet(BuildContext context, OrderEntity order) {
                                     onPressed: () => _showDeleteConfirmation(
                                       context,
                                       order.id,
+                                      l10n
                                     ),
-                                    label: const Text('Delete'),
+                                    label: Text(l10n.delete),
                                     icon: const Icon(Icons.delete_outline),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.error,
@@ -465,19 +469,19 @@ void _showOrderDetailSheet(BuildContext context, OrderEntity order) {
   );
 }
 
-void _showDeleteConfirmation(BuildContext context, String orderId) {
+void _showDeleteConfirmation(BuildContext context, String orderId, AppLocalizations l10n) {
   showDialog(
     context: context,
     builder: (dialogContext) {
       return AlertDialog(
-        title: const Text('Confirm Delete'),
-        content: const Text(
-          'Are you sure you want to delete this order? This cannot be undone.',
+        title: Text(l10n.confirmDelete),
+        content: Text(
+          l10n.deleteMessage,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancelDelete),
           ),
           TextButton(
             onPressed: () {
@@ -485,8 +489,8 @@ void _showDeleteConfirmation(BuildContext context, String orderId) {
               Navigator.of(dialogContext).pop();
               Navigator.of(context).pop();
             },
-            child: const Text(
-              'Delete',
+            child: Text(
+              l10n.delete,
               style: TextStyle(color: AppColors.error),
             ),
           ),
@@ -496,27 +500,27 @@ void _showDeleteConfirmation(BuildContext context, String orderId) {
   );
 }
 
-void _showProfileDeleteConfirmation(BuildContext context) {
+void _showProfileDeleteConfirmation(BuildContext context,AppLocalizations l10n) {
   showDialog(
     context: context,
     builder: (dialogContext) {
       return AlertDialog(
-        title: const Text('Confirm Delete'),
-        content: const Text(
-          'Are you sure you want to delete this profile? This cannot be undone.',
+        title: Text(l10n.confirmDelete),
+        content: Text(
+          l10n.deleteProfile,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancelDelete),
           ),
           TextButton(
             onPressed: () {
               context.read<AuthBloc>().add(AccountDeletionRequest());
               Navigator.of(dialogContext).pop();
             },
-            child: const Text(
-              'Delete',
+            child: Text(
+              l10n.delete,
               style: TextStyle(color: AppColors.error),
             ),
           ),

@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+const _clear = Object();
+
 class AddressState{
   final List<String> cities;
   final List<String> filteredCities;
@@ -20,25 +22,26 @@ class AddressState{
     this.isLoading = false,
   });
 
+
   AddressState copyWith({
-    List<String>? cities,
-    List<String>? filteredCities,
-    List<String>? streets,
-    List<String>? filteredStreets,
-    String? selectedCity,
-    String? selectedStreet,
-    bool? isLoading,
-  }) {
-    return AddressState(
-      cities: cities ?? this.cities,
-      filteredCities: filteredCities ?? this.filteredCities,
-      streets: streets ?? this.streets,
-      filteredStreets: filteredStreets ?? this.filteredStreets,
-      selectedCity: selectedCity ?? this.selectedCity,
-      selectedStreet: selectedStreet ?? this.selectedStreet,
-      isLoading: isLoading ?? this.isLoading,
-    );
-  }
+  List<String>? cities,
+  List<String>? filteredCities,
+  List<String>? streets,
+  List<String>? filteredStreets,
+  Object? selectedCity = _clear,
+  Object? selectedStreet = _clear,
+  bool? isLoading,
+}) {
+  return AddressState(
+    cities: cities ?? this.cities,
+    filteredCities: filteredCities ?? this.filteredCities,
+    streets: streets ?? this.streets,
+    filteredStreets: filteredStreets ?? this.filteredStreets,
+    selectedCity: selectedCity == _clear ? this.selectedCity : selectedCity as String?,
+    selectedStreet: selectedStreet == _clear ? this.selectedStreet : selectedStreet as String?,
+    isLoading: isLoading ?? this.isLoading,
+  );
+}
 }
 
 class AddressCubit extends Cubit<AddressState>{
@@ -70,10 +73,12 @@ class AddressCubit extends Cubit<AddressState>{
       selectedCity: cityName,
       selectedStreet: null,
       streets: [],
+      filteredStreets: [],
       isLoading: true,
     ));
 
-    final List<dynamic> data = await client
+    try{
+      final List<dynamic> data = await client
       .from('streets')
       .select('name, cities!inner(name)')
       .eq('cities.name', cityName)
@@ -86,6 +91,11 @@ class AddressCubit extends Cubit<AddressState>{
       filteredStreets: streetNames,
       isLoading: false
     ));
+    } catch (e) {
+      emit(state.copyWith(isLoading: false));
+    }
+
+    
   }
 
   void filterStreets(String query){

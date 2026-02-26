@@ -193,7 +193,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get success => 'Success';
 
   @override
-  String get saved => 'Saved';
+  String get save => 'Save';
 
   @override
   String get justNow => 'Just now';
@@ -212,4 +212,111 @@ class AppLocalizationsEn extends AppLocalizations {
   String daysAgo(Object count) {
     return '$count days ago';
   }
+
+  @override
+  String get editProfile => 'Edit Profile';
+
+  @override
+  String get order => 'Order';
+
+  @override
+  String get orderSlip => 'Order Pay Slip';
+
+  @override
+  String get orderId => 'Order ID';
+
+  @override
+  String get pending => 'PENDING';
+
+  @override
+  String get deliveryAddress => 'DELIVERY ADDRESS';
+
+  @override
+  String get items => 'ITEMS';
+
+  @override
+  String get deliveryFee => 'Delivery Fee';
+
+  @override
+  String get free => 'Free';
+
+  @override
+  String get totalAmount => 'Total Amount';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get cancelDelete => 'Cancel';
+
+  @override
+  String get confirmDelete => 'Confirm Delete';
+
+  @override
+  String get deleteMessage =>
+      'Are you sure you want to delete this order? This cannot be undone.';
+
+  @override
+  String get deleteProfile =>
+      'Are you sure you want to delete this profile? This cannot be undone.';
+
+  @override
+  String get productDetail => 'Product Details';
+
+  @override
+  String get updateCart => 'Update to Cart';
+
+  @override
+  String get toCheckOut => 'Proceed to Checkout';
+
+  @override
+  String get checkOut => 'Check Out';
+
+  @override
+  String get contactDetail => 'Contact Details';
+
+  @override
+  String get receiverName => 'Receiver Name';
+
+  @override
+  String get receiverPhone => 'Receiver Phone';
+
+  @override
+  String get selectCity => 'Select City';
+
+  @override
+  String get selectStreet => 'Select Street';
+
+  @override
+  String get houseNo => 'House/Apartment No.';
+
+  @override
+  String get optional => 'Optional';
+
+  @override
+  String get additionalNote => 'Additional Note';
+
+  @override
+  String get payment => 'Payment';
+
+  @override
+  String get pay => 'Pay';
+
+  @override
+  String get required => 'Required';
+
+  @override
+  String get phoneNumberError => 'Enter a valid number';
+
+  @override
+  String get phoneNUmberEmpty => 'Enter your phone number';
+
+  @override
+  String get houseNoError => 'Enter house number';
+
+  @override
+  String get orderSuccess => 'Order placed successfully!';
+
+  @override
+  String get errorFields => 'Please complete all address fields';
 }

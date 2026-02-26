@@ -422,11 +422,11 @@ abstract class AppLocalizations {
   /// **'Success'**
   String get success;
 
-  /// No description provided for @saved.
+  /// No description provided for @save.
   ///
   /// In en, this message translates to:
-  /// **'Saved'**
-  String get saved;
+  /// **'Save'**
+  String get save;
 
   /// No description provided for @justNow.
   ///
@@ -451,6 +451,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} days ago'**
   String daysAgo(Object count);
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editProfile;
+
+  /// No description provided for @order.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get order;
+
+  /// No description provided for @orderSlip.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Pay Slip'**
+  String get orderSlip;
+
+  /// No description provided for @orderId.
+  ///
+  /// In en, this message translates to:
+  /// **'Order ID'**
+  String get orderId;
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'PENDING'**
+  String get pending;
+
+  /// No description provided for @deliveryAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'DELIVERY ADDRESS'**
+  String get deliveryAddress;
+
+  /// No description provided for @items.
+  ///
+  /// In en, this message translates to:
+  /// **'ITEMS'**
+  String get items;
+
+  /// No description provided for @deliveryFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery Fee'**
+  String get deliveryFee;
+
+  /// No description provided for @free.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get free;
+
+  /// No description provided for @totalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Amount'**
+  String get totalAmount;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @cancelDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelDelete;
+
+  /// No description provided for @confirmDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Delete'**
+  String get confirmDelete;
+
+  /// No description provided for @deleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this order? This cannot be undone.'**
+  String get deleteMessage;
+
+  /// No description provided for @deleteProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this profile? This cannot be undone.'**
+  String get deleteProfile;
+
+  /// No description provided for @productDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Details'**
+  String get productDetail;
+
+  /// No description provided for @updateCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Update to Cart'**
+  String get updateCart;
+
+  /// No description provided for @toCheckOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Proceed to Checkout'**
+  String get toCheckOut;
+
+  /// No description provided for @checkOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Out'**
+  String get checkOut;
+
+  /// No description provided for @contactDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Details'**
+  String get contactDetail;
+
+  /// No description provided for @receiverName.
+  ///
+  /// In en, this message translates to:
+  /// **'Receiver Name'**
+  String get receiverName;
+
+  /// No description provided for @receiverPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Receiver Phone'**
+  String get receiverPhone;
+
+  /// No description provided for @selectCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Select City'**
+  String get selectCity;
+
+  /// No description provided for @selectStreet.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Street'**
+  String get selectStreet;
+
+  /// No description provided for @houseNo.
+  ///
+  /// In en, this message translates to:
+  /// **'House/Apartment No.'**
+  String get houseNo;
+
+  /// No description provided for @optional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get optional;
+
+  /// No description provided for @additionalNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Note'**
+  String get additionalNote;
+
+  /// No description provided for @payment.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get payment;
+
+  /// No description provided for @pay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay'**
+  String get pay;
+
+  /// No description provided for @required.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get required;
+
+  /// No description provided for @phoneNumberError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid number'**
+  String get phoneNumberError;
+
+  /// No description provided for @phoneNUmberEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number'**
+  String get phoneNUmberEmpty;
+
+  /// No description provided for @houseNoError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter house number'**
+  String get houseNoError;
+
+  /// No description provided for @orderSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Order placed successfully!'**
+  String get orderSuccess;
+
+  /// No description provided for @errorFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please complete all address fields'**
+  String get errorFields;
 }
 
 class _AppLocalizationsDelegate

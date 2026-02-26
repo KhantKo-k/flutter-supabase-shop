@@ -61,16 +61,12 @@ class _PasswordPageState extends State<PasswordPage> {
             });
           });
         }
-        // if(state is LoginLoading){
-        //   return;
-        // }
       },
       child: Builder(
         builder: (context) {
           final authState = context.watch<AuthBloc>().state;
           if(authState is Authenticated){
             return const Scaffold(
-              //body: SizedBox.shrink(),
               body: Center(
                 child: CircularProgressIndicator(),
               ),

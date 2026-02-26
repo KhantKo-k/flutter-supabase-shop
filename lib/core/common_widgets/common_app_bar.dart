@@ -49,7 +49,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Text(title),
-      centerTitle: true,
+      //centerTitle: true,
       backgroundColor: Colors.transparent,
       //backgroundColor: AppColors.primary,
       actions: [
@@ -60,7 +60,6 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
         const LanguageSelector(),
         IconButton(
           onPressed: () {
-            print('pressing log out');
             context.read<AuthBloc>().add(LogoutRequested());
           },
           icon: const Icon(Icons.logout),

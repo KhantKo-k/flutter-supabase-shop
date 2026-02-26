@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/core/common_widgets/common_app_bar.dart';
 import 'package:shop_project/core/di/service_locator.dart';
+import 'package:shop_project/core/localization/l10n/app_localizations.dart';
 import 'package:shop_project/core/navigation/app_router.dart';
 import 'package:shop_project/features/cart/domain/entities/cart_item.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
@@ -15,8 +16,9 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: CommonAppBar(title: "Cart"),
+      appBar: CommonAppBar(title: l10n.cart),
       body: Stack(
         children: [
           Positioned(
@@ -38,9 +40,9 @@ class CartPage extends StatelessWidget {
           BlocBuilder<CartBloc, CartState>(
             builder: (context, state) {
               if (state.items.isEmpty) {
-                return _buildEmptyCart();
+                return _buildEmptyCart(l10n);
               }
-              return _buildCartList(state, context);
+              return _buildCartList(state, context, l10n);
             },
           ),
         ],
@@ -48,27 +50,27 @@ class CartPage extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyCart() {
+  Widget _buildEmptyCart(AppLocalizations l10n) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.shopping_cart_outlined, size: 80),
           const SizedBox(height: 16),
-          const Text('Your cart is Empty'),
+          Text(l10n.emptyCart),
         ],
       ),
     );
   }
 
-  Widget _buildCartList(CartState state, BuildContext context) {
+  Widget _buildCartList(CartState state, BuildContext context, AppLocalizations l10n) {
     return Column(
       children: [
         Expanded(
           child: ListView.separated(
             padding: const EdgeInsets.all(16),
             itemCount: state.items.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
+            separatorBuilder: (_, _) => const SizedBox(height: 12),
             itemBuilder: (_, index) {
               final item = state.items[index];
               return _buildCartItem(item, state, context);
@@ -76,7 +78,7 @@ class CartPage extends StatelessWidget {
           ),
         ),
 
-        _buildCheckoutSection(state),
+        _buildCheckoutSection(state,l10n),
       ],
     );
   }
@@ -177,7 +179,7 @@ class CartPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCheckoutSection(CartState state) {
+  Widget _buildCheckoutSection(CartState state, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 10),
       child: Column(
@@ -185,7 +187,7 @@ class CartPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Total', style: TextStyle(fontSize: 18)),
+              Text(l10n.total, style: TextStyle(fontSize: 18)),
               Text(
                 '\$${state.totalPrice.toStringAsFixed(2)}',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -199,67 +201,8 @@ class CartPage extends StatelessWidget {
             child: ElevatedButton(onPressed: ()
             {
               _navigateToCheckout(state.items, state.totalPrice);
-            }, child: const Text('Proceed to Checkout'),
+            }, child: Text(l10n.toCheckOut),
             ),
-            // child: BlocConsumer<OrderBloc, OrderState>(
-            //   listener: (context, orderState) {
-            //     switch (orderState.status) {
-            //       case OrderStatus.initial:
-            //       case OrderStatus.loading:
-            //         break;
-            //       case OrderStatus.success:
-            //         context.read<CartBloc>().add(ClearCart());
-            //         ScaffoldMessenger.of(context).showSnackBar(
-            //           SnackBar(content: Text("Order placed successfully!")),
-            //         );
-            //         break;
-
-            //       case OrderStatus.failure:
-            //         ScaffoldMessenger.of(context).showSnackBar(
-            //           SnackBar(
-            //             content: Text(
-            //               orderState.failure?.message ?? 'Unknown error',
-            //             ),
-            //           ),
-            //         );
-            //         break;
-            //       case OrderStatus.loaded:
-            //         break;
-            //     }
-            //   },
-            //   builder: (context, orderState) {
-            //     bool isPlacing = orderState.status == OrderStatus.loading;
-
-            //     return ElevatedButton(
-            //       onPressed: isPlacing
-            //           ? null
-            //           : () {
-            //               final orderItems = state.items
-            //                   .map(
-            //                     (cartItem) => OrderItemEntity(
-            //                       id: '',
-            //                       orderId: '',
-            //                       productId: cartItem.productId,
-            //                       productName: cartItem.name,
-            //                       price: cartItem.price,
-            //                       quantity: cartItem.quantity,
-            //                     ),
-            //                   )
-            //                   .toList();
-
-            //               context.read<OrderBloc>().add(
-            //                 PlaceOrderRequested(
-            //                   items: orderItems,
-            //                   totalAmount: state.totalPrice,
-            //                 ),
-            //               );
-            //             },
-            //       child: isPlacing
-            //           ? const CircularProgressIndicator()
-            //           : const Text('Order now'),
-            //     );
-            //   },
-            // ),
           ),
         ],
       ),

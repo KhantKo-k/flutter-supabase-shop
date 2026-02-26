@@ -42,7 +42,7 @@ class AppLocalizationsMy extends AppLocalizations {
   String get name => 'အမည်';
 
   @override
-  String get cancel => 'ထွက်မည်';
+  String get cancel => 'ဖျက်မည်';
 
   @override
   String get typePassword => 'လျှို့ဝှက်နံပါတ်ရိုက်ထည့်ပါ';
@@ -117,7 +117,7 @@ class AppLocalizationsMy extends AppLocalizations {
   String get startShopping => 'Start Shopping';
 
   @override
-  String get subtotal => 'Subtotal';
+  String get subtotal => 'အောက်ခံတန်ဖိုး';
 
   @override
   String get shipping => 'Shipping';
@@ -126,7 +126,7 @@ class AppLocalizationsMy extends AppLocalizations {
   String get tax => 'Tax';
 
   @override
-  String get total => 'Total';
+  String get total => 'စုစုပေါင်း';
 
   @override
   String get checkout => 'ငွေပေးချေမည်';
@@ -138,7 +138,7 @@ class AppLocalizationsMy extends AppLocalizations {
   String get shippingAddress => 'Shipping Address';
 
   @override
-  String get paymentMethod => 'Payment Method';
+  String get paymentMethod => 'ငွေပေးချေမှုနည်းလမ်း';
 
   @override
   String get orderSummary => 'Order Summary';
@@ -147,7 +147,7 @@ class AppLocalizationsMy extends AppLocalizations {
   String get placeOrder => 'Place Order';
 
   @override
-  String get myOrders => 'My Orders';
+  String get myOrders => 'ကျွန်ုပ်၏အော်ဒါများ';
 
   @override
   String get settings => 'Settings';
@@ -193,7 +193,7 @@ class AppLocalizationsMy extends AppLocalizations {
   String get success => 'Success';
 
   @override
-  String get saved => 'Saved';
+  String get save => 'သိမ်းမည်';
 
   @override
   String get justNow => 'Just now';
@@ -212,4 +212,110 @@ class AppLocalizationsMy extends AppLocalizations {
   String daysAgo(Object count) {
     return '$count days ago';
   }
+
+  @override
+  String get editProfile => 'ပရိုဖိုင်ပြင်ရန်';
+
+  @override
+  String get order => 'အော်ဒါ';
+
+  @override
+  String get orderSlip => 'ငွေပေးချေမှုအချုပ်အနှစ်';
+
+  @override
+  String get orderId => 'အော်ဒါ နံပါတ်';
+
+  @override
+  String get pending => 'ဆောင်ရွက်ဆဲ';
+
+  @override
+  String get deliveryAddress => 'ပို့ဆောင်ရန်လိပ်စာ';
+
+  @override
+  String get items => 'ပစ္စည်းများ';
+
+  @override
+  String get deliveryFee => 'ပို့ဆောင်ခ';
+
+  @override
+  String get free => 'အခမဲ့';
+
+  @override
+  String get totalAmount => 'စုစုပေါင်းတန်ဖိုး';
+
+  @override
+  String get delete => 'ဖျက်မည်';
+
+  @override
+  String get cancelDelete => 'မဖျက်တော့ပါ';
+
+  @override
+  String get confirmDelete => 'ဖျက်ရန်အတည်ပြုပါ';
+
+  @override
+  String get deleteMessage =>
+      'ဤအော်ဒါကိုဖျက်ရန်သေချာပါသလား။ ၎င်းကိုပြန်လည်ရယူ၍မရနိုင်ပါ။';
+
+  @override
+  String get deleteProfile => 'ဒီပရိုဖိုင်ကိုဖျက်မှာသေချာလား။';
+
+  @override
+  String get productDetail => 'ကုန်ပစ္စည်းအသေးစိတ်';
+
+  @override
+  String get updateCart => 'ဈေးခြင်းထဲသို့ပြင်ဆင်သိမ်းမည်';
+
+  @override
+  String get toCheckOut => 'ငွေပေးချေရန် ဆက်လုပ်မည်';
+
+  @override
+  String get checkOut => 'ငွေပေးချေရန်';
+
+  @override
+  String get contactDetail => 'ဆက်သွယ်ရန်အချက်အလက်';
+
+  @override
+  String get receiverName => 'လက်ခံသူအမည်';
+
+  @override
+  String get receiverPhone => 'လက်ခံသူဖုန်းနံပါတ်';
+
+  @override
+  String get selectCity => 'မြို့/မြို့နယ်ရွေးချယ်ပါ';
+
+  @override
+  String get selectStreet => 'လမ်းရွေးချယ်ပါ';
+
+  @override
+  String get houseNo => 'အိမ်အမှတ်/တိုက်ခန်းအမှတ်';
+
+  @override
+  String get optional => 'ထည့်ရန်မလိုအပ်';
+
+  @override
+  String get additionalNote => 'အထူးမှာကြားချက်';
+
+  @override
+  String get payment => 'ငွေပေးချေမှု';
+
+  @override
+  String get pay => 'ငွေပေးချေမည်';
+
+  @override
+  String get required => 'လိုအပ်သည်';
+
+  @override
+  String get phoneNumberError => 'ဖုန်းနံပါတ်မှန်ကန်စွာထည့်ပါ';
+
+  @override
+  String get phoneNUmberEmpty => 'သင့်ဖုန်းနံပါတ်ထည့်ပါ';
+
+  @override
+  String get houseNoError => 'အိမ်အမှတ်ထည့်ပါ';
+
+  @override
+  String get orderSuccess => 'အော်ဒါအောင်မြင်စွာတင်ခဲ့သည်။';
+
+  @override
+  String get errorFields => 'လိပ်စာအကွက်အားလုံးဖြည့်စွက်ပေးပါ';
 }

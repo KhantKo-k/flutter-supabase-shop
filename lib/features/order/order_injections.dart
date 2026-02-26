@@ -56,7 +56,7 @@ void injectOrderBloc(){
       deleteOrder: serviceLocator(),
     )
   );
-  serviceLocator.registerLazySingleton(
+  serviceLocator.registerFactory(
     () => AddressCubit(
       serviceLocator()
     )

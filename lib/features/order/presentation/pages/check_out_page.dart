@@ -1,6 +1,11 @@
+
+
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/core/di/service_locator.dart';
+import 'package:shop_project/core/localization/l10n/app_localizations.dart';
 import 'package:shop_project/core/theme/color_palette.dart';
 import 'package:shop_project/features/cart/domain/entities/cart_item.dart';
 import 'package:shop_project/features/cart/presentation/bloc/cart_bloc.dart';
@@ -44,10 +49,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return BlocProvider(
       create: (context) => serviceLocator<AddressCubit>(),
       child: Scaffold(
-        appBar: AppBar(title: Text("Check out")),
+        appBar: AppBar(title: Text(l10n.checkOut)),
         body: Builder(
           builder: (context) {
             return Form(
@@ -57,25 +63,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildSectionTitle("Contact Details"),
-                    _buildReceiverNameField(),
+                    _buildSectionTitle(l10n.contactDetail),
+                    _buildReceiverNameField(l10n),
                     const SizedBox(height: 12),
-                    _buildReceiverPhoneField(),
+                    _buildReceiverPhoneField(l10n),
                     const SizedBox(height: 24),
-                    _buildSectionTitle("Delivery Address"),
-                    _buildCityDropdowns(),
+                    _buildSectionTitle(l10n.deliveryAddress),
+                    _buildCityDropdowns(l10n),
                     const SizedBox(height: 12),
-                    _buildStreetDropdowns(),
+                    _buildStreetDropdowns(l10n),
                     const SizedBox(height: 12),
-                    _buildHouseNoField(),
+                    _buildHouseNoField(l10n),
                     const SizedBox(height: 24),
-                    _buildSectionTitle("Optional: "),
-                    _buildNoteField(),
+                    _buildSectionTitle("${l10n.optional}: "),
+                    _buildNoteField(l10n),
                     const SizedBox(height: 24),
-                    _buildSectionTitle("Payment"),
-                    _buildPaymnetDropdown(),
+                    _buildSectionTitle(l10n.payment),
+                    _buildPaymnetDropdown(l10n),
                     const SizedBox(height: 24),
-                    _buildPlaceOrderButton(),
+                    _buildPlaceOrderButton(l10n),
                   ],
                 ),
               ),
@@ -93,19 +99,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  Widget _buildReceiverNameField() {
+  Widget _buildReceiverNameField(AppLocalizations l10n) {
     return TextFormField(
       controller: _nameController,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Required';
+          return l10n.required;
         }
         return null;
       },
       keyboardType: TextInputType.text,
       maxLines: 1,
       decoration: InputDecoration(
-        labelText: 'Receiver Name',
+        labelText: l10n.receiverName,
         prefixIcon: Icon(Icons.person, size: 20),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
@@ -113,22 +119,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  Widget _buildReceiverPhoneField() {
+  Widget _buildReceiverPhoneField(AppLocalizations l10n) {
     return TextFormField(
       controller: _phoneController,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Enter your phone number';
+          return l10n.phoneNUmberEmpty;
         }
         if (value.length != 11) {
-          return 'Enter a valid phone number';
+          return l10n.phoneNumberError;
         }
         return null;
       },
       keyboardType: TextInputType.number,
       maxLines: 1,
       decoration: InputDecoration(
-        labelText: 'Receiver Phone',
+        labelText: l10n.receiverPhone,
         prefixIcon: Icon(Icons.person, size: 20),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
@@ -136,24 +142,24 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  Widget _buildCityDropdowns() {
+  Widget _buildCityDropdowns(AppLocalizations l10n) {
     return BlocBuilder<AddressCubit, AddressState>(
       builder: (context, state) => _buildSearchableField(
         context: context,
         label: "City",
-        value: state.selectedCity ?? "Select City",
+        value: state.selectedCity ?? l10n.selectCity,
         onTap: () => _showSearchModal(context, "City"),
         icon: Icons.location_city,
       ),
     );
   }
 
-  Widget _buildStreetDropdowns() {
+  Widget _buildStreetDropdowns(AppLocalizations l10n) {
     return BlocBuilder<AddressCubit, AddressState>(
       builder: (context, state) => _buildSearchableField(
         context: context,
         label: "Street",
-        value: state.selectedStreet ?? "Select Street",
+        value: state.selectedStreet ?? l10n.selectStreet,
         onTap: state.selectedCity == null
             ? null
             : () => _showSearchModal(context, "Street"),
@@ -201,19 +207,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  Widget _buildHouseNoField() {
+  Widget _buildHouseNoField(AppLocalizations l10n) {
     return TextFormField(
       controller: _houseNoController,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Enter house number';
+          return l10n.houseNoError;
         }
         return null;
       },
       keyboardType: TextInputType.text,
       maxLines: 1,
       decoration: InputDecoration(
-        labelText: 'House/Apartment No.',
+        labelText: l10n.houseNo,
         prefixIcon: Icon(Icons.home_outlined, size: 20),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
@@ -221,13 +227,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  Widget _buildNoteField() {
+  Widget _buildNoteField(AppLocalizations l10n) {
     return TextFormField(
       controller: _noteController,
       keyboardType: TextInputType.text,
       maxLines: 2,
       decoration: InputDecoration(
-        labelText: 'Additional note: ',
+        labelText: '${l10n.additionalNote}: ',
         prefixIcon: Icon(Icons.note_add, size: 20),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
@@ -235,7 +241,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  Widget _buildPaymnetDropdown() {
+  Widget _buildPaymnetDropdown(AppLocalizations l10n) {
     return DropdownButtonFormField<String>(
       initialValue: 'Cash on Delivery',
       items: [
@@ -246,11 +252,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
       onChanged: (val) => setState(() {
         _selectedPayment = val!;
       }),
-      decoration: const InputDecoration(labelText: 'Payment Method'),
+      decoration: InputDecoration(labelText: l10n.paymentMethod),
     );
   }
 
-  Widget _buildPlaceOrderButton() {
+  Widget _buildPlaceOrderButton(AppLocalizations l10n) {
     return BlocBuilder<AddressCubit, AddressState>(
       builder: (context, addressState) {
         return BlocConsumer<OrderBloc, OrderState>(
@@ -261,7 +267,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               context.read<OrderBloc>().add(LoadMyOrders());
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Order placed successfully!")),
+                 SnackBar(content: Text(l10n.orderSuccess)),
               );
             }
           },
@@ -272,7 +278,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   : () => _onPlaceOrder(context, addressState),
               child: state.status == OrderStatus.loading
                   ? const CircularProgressIndicator()
-                  : Text('Pay  \$${widget.totalAmount}'),
+                  : Text('${l10n.pay}  \$${widget.totalAmount}'),
             );
           },
         );
