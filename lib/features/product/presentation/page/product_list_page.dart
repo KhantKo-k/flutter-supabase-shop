@@ -5,6 +5,7 @@ import 'package:shop_project/core/common_widgets/category_chip.dart';
 import 'package:shop_project/core/common_widgets/common_clipper.dart';
 import 'package:shop_project/core/common_widgets/language_selector.dart';
 import 'package:shop_project/core/di/service_locator.dart';
+import 'package:shop_project/core/localization/l10n/app_localizations.dart';
 import 'package:shop_project/core/navigation/app_router.dart';
 import 'package:shop_project/core/theme/color_palette.dart';
 import 'package:shop_project/core/theme/theme_cubit.dart';
@@ -41,6 +42,7 @@ class ProductListPage extends StatelessWidget {
   }
 
   Widget _buildSilverAppBar(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SliverAppBar(
       expandedHeight: 160.0,
       floating: false,
@@ -53,7 +55,8 @@ class ProductListPage extends StatelessWidget {
         ),
         const LanguageSelector(),
         IconButton(
-          onPressed: () => context.read<AuthBloc>().add(LogoutRequested()),
+          onPressed: () => _showLogoutConfirm(context,l10n),
+          //context.read<AuthBloc>().add(LogoutRequested()),
           icon: const Icon(Icons.logout),
         ),
       ],
@@ -69,7 +72,7 @@ class ProductListPage extends StatelessWidget {
               bottom: isCollapsed ? 20 : 75,
             ),
             title: Text(
-              "Our Shop",
+              l10n.appName,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             background: Stack(
@@ -315,4 +318,34 @@ class ProductListPage extends StatelessWidget {
   Widget _buildErrorState(BuildContext context, ProductListState state) {
     return SliverFillRemaining(child: _buildEmptyList(context));
   }
+}
+
+void _showLogoutConfirm(BuildContext context,AppLocalizations l10n) {
+  showDialog(
+    context: context,
+    builder: (dialogContext) {
+      return AlertDialog(
+        title: Text(l10n.confirmLogout),
+        content: Text(
+          l10n.logoutText,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () {
+              context.read<AuthBloc>().add(LogoutRequested());
+             // Navigator.of(dialogContext).pop();
+            },
+            child: Text(
+              l10n.logout,
+              style: TextStyle(color: AppColors.error),
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }

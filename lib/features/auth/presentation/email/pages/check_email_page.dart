@@ -100,7 +100,7 @@ class _CheckEmailPageState extends State<CheckEmailPage> {
               l10n.login,
               style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
             ),
-            Text('Good to see you back! 🖤', style: TextStyle(fontSize: 16)),
+            Text('${l10n.greetingText} 🖤', style: TextStyle(fontSize: 16)),
             SizedBox(height: 20),
 
             _buildInputFields(l10n),
@@ -149,10 +149,10 @@ class _CheckEmailPageState extends State<CheckEmailPage> {
       keyboardType: TextInputType.emailAddress,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please enter your email';
+          return l10n.emailError;
         }
         if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-          return 'Please enter a valid email';
+          return l10n.emailValidation;
         }
         return null;
       },

@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// The name of the application
   ///
   /// In en, this message translates to:
-  /// **'ShopEasy'**
+  /// **'IShop'**
   String get appName;
 
   /// No description provided for @home.
@@ -185,7 +185,7 @@ abstract class AppLocalizations {
   /// No description provided for @createAcc.
   ///
   /// In en, this message translates to:
-  /// **'Create \nAccount'**
+  /// **'Create Account'**
   String get createAcc;
 
   /// No description provided for @phoneNumber.
@@ -373,6 +373,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign Up'**
   String get signup;
+
+  /// No description provided for @hello.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello'**
+  String get hello;
 
   /// No description provided for @addedToCart.
   ///
@@ -661,6 +667,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please complete all address fields'**
   String get errorFields;
+
+  /// No description provided for @nameError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your name'**
+  String get nameError;
+
+  /// No description provided for @emailError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your email'**
+  String get emailError;
+
+  /// No description provided for @passwordError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your password'**
+  String get passwordError;
+
+  /// No description provided for @emailValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get emailValidation;
+
+  /// No description provided for @passwordValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be exactly 8 numbers'**
+  String get passwordValidation;
+
+  /// No description provided for @welcomeText.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to our shopping app. We make your \n shopping experiences ease and convient'**
+  String get welcomeText;
+
+  /// No description provided for @greetingText.
+  ///
+  /// In en, this message translates to:
+  /// **'Good to see you back!'**
+  String get greetingText;
+
+  /// No description provided for @confirmLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Logout'**
+  String get confirmLogout;
+
+  /// No description provided for @logoutText.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out?'**
+  String get logoutText;
 }
 
 class _AppLocalizationsDelegate

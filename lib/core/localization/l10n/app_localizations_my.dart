@@ -9,7 +9,7 @@ class AppLocalizationsMy extends AppLocalizations {
   AppLocalizationsMy([String locale = 'my']) : super(locale);
 
   @override
-  String get appName => 'ရှော့အဆင်';
+  String get appName => 'အိုင်ရှော့ပ်';
 
   @override
   String get home => 'ပင်မစာမျက်နှာ';
@@ -156,13 +156,16 @@ class AppLocalizationsMy extends AppLocalizations {
   String get helpCenter => 'Help Center';
 
   @override
-  String get logout => 'Logout';
+  String get logout => 'ပြန်ထွက်ရန်';
 
   @override
   String get login => 'အကောင့်ဝင်မည်';
 
   @override
   String get signup => 'Sign Up';
+
+  @override
+  String get hello => 'မင်္ဂလာပါ';
 
   @override
   String addedToCart(Object product) {
@@ -318,4 +321,32 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get errorFields => 'လိပ်စာအကွက်အားလုံးဖြည့်စွက်ပေးပါ';
+
+  @override
+  String get nameError => 'သင့်နာမည်ထည့်ပေးပါ';
+
+  @override
+  String get emailError => 'သင့်အီးမေးလ်လိပ်စာထည့်ပေးပါ';
+
+  @override
+  String get passwordError => 'လျှို့ဝှက်နံပါတ်ထည့်ပေးပါ';
+
+  @override
+  String get emailValidation => 'မှန်ကန်သောအီးမေးလ်လိပ်စာကိုထည့်ပါ';
+
+  @override
+  String get passwordValidation => 'စကားဝှက်သည် ဂဏန်း ၈ လုံးအတိအကျဖြစ်ရပါမည်';
+
+  @override
+  String get welcomeText =>
+      'ကျွန်ုပ်တို့၏ဈေးဝယ်အက်ပ်သို့ ကြိုဆိုပါသည်။ သင်၏ဈေးဝယ်အတွေ့အကြုံကို လွယ်ကူအဆင်ပြေစေရန် ကျွန်ုပ်တို့ဖန်တီးပေးထားပါသည်။';
+
+  @override
+  String get greetingText => 'ပြန်တွေ့ရတာ ဝမ်းသာပါတယ်။';
+
+  @override
+  String get confirmLogout => 'အကောင့်မှထွက်ရန်အတည်ပြုပါ';
+
+  @override
+  String get logoutText => 'အကောင့်မှထွက်ရန်သေချာပါသလား။';
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_project/core/common_widgets/language_selector.dart';
+import 'package:shop_project/core/localization/l10n/app_localizations.dart';
+import 'package:shop_project/core/theme/color_palette.dart';
 import 'package:shop_project/core/theme/theme_cubit.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.dart';
 import 'package:shop_project/features/auth/presentation/password/bloc/auth_event.dart';
@@ -46,6 +48,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AppBar(
       automaticallyImplyLeading: false,
       title: Text(title),
@@ -59,9 +62,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         const LanguageSelector(),
         IconButton(
-          onPressed: () {
-            context.read<AuthBloc>().add(LogoutRequested());
-          },
+          onPressed: () => _showLogoutConfirm(context, l10n),
+          // onPressed: () {
+          //   context.read<AuthBloc>().add(LogoutRequested());
+          // },
           icon: const Icon(Icons.logout),
         ),
       ],
@@ -70,4 +74,34 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+void _showLogoutConfirm(BuildContext context,AppLocalizations l10n) {
+  showDialog(
+    context: context,
+    builder: (dialogContext) {
+      return AlertDialog(
+        title: Text(l10n.confirmLogout),
+        content: Text(
+          l10n.logoutText,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () {
+              context.read<AuthBloc>().add(LogoutRequested());
+             // Navigator.of(dialogContext).pop();
+            },
+            child: Text(
+              l10n.logout,
+              style: TextStyle(color: AppColors.error),
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }

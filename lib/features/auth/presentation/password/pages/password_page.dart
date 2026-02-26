@@ -140,7 +140,7 @@ class _PasswordPageState extends State<PasswordPage> {
       child: Column(
         children: [
           Text(
-            "Hello, $username !",
+            "${l10n.hello}, $username !",
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),

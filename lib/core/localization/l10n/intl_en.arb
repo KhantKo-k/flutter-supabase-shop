@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appName": "ShopEasy",
+  "appName": "IShop",
   "@appName": {
     "description": "The name of the application"
   },
@@ -19,7 +19,7 @@
   "cancel": "Cancel",
   "typePassword": "Type your password",
   "done": "Done",
-  "createAcc": "Create \nAccount",
+  "createAcc": "Create Account",
   "phoneNumber": "Phone number",
   
 
@@ -61,6 +61,7 @@
   "logout": "Logout",
   "login": "Login",
   "signup": "Sign Up",
+  "hello": "Hello",
   
 
   "addedToCart": "{product} added to cart",
@@ -120,5 +121,14 @@
   "phoneNUmberEmpty": "Enter your phone number",
   "houseNoError": "Enter house number",
   "orderSuccess": "Order placed successfully!",
-  "errorFields": "Please complete all address fields"
+  "errorFields": "Please complete all address fields",
+  "nameError": "Please enter your name",
+  "emailError": "Please enter your email",
+  "passwordError": "Please enter your password",
+  "emailValidation": "Please enter a valid email",
+  "passwordValidation": "Password must be exactly 8 numbers",
+  "welcomeText": "Welcome to our shopping app. We make your \n shopping experiences ease and convient",
+  "greetingText": "Good to see you back!",
+  "confirmLogout": "Confirm Logout",
+  "logoutText": "Are you sure you want to log out?"
 }

@@ -21,12 +21,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _usernameContrller = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _phoneController =
-      TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
-  // bool _isConfirmPasswordVisible = false;
 
   @override
   void dispose() {
@@ -48,7 +46,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
 
         if (state is SignUpSuccess) {
-          // context.read<AuthBloc>().add(LogoutRequested());
           _navigateToLogin();
         }
       },
@@ -62,11 +59,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: MediaQuery.sizeOf(context).width,
                 height: MediaQuery.sizeOf(context).height,
                 child: Stack(
-                  children: [
-                    _buildUpperSection(),
-                    
-                    _buildFormSection(),
-                  ],
+                  children: [_buildUpperSection(), _buildFormSection()],
                 ),
               ),
             ),
@@ -90,7 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
           _buildCancelButton(l10n),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 50),
         ],
       ),
     );
@@ -100,7 +93,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final l10n = AppLocalizations.of(context);
     return SizedBox(
       height: MediaQuery.sizeOf(context).height * 0.5,
-      //color: Colors.white,
       child: Stack(
         children: [
           Positioned(
@@ -109,25 +101,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
             right: -30,
             child: Image.asset('assets/images/bubble1.png'),
           ),
+
           Positioned(left: 0, child: Image.asset('assets/images/bubble2.png')),
           Positioned(
-            top: 140,
+            top: 200,
             left: 30,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 l10n.createAcc,
-                //'Create \nAccount',
                 style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
               ),
             ),
           ),
-          Positioned(
-            top: 300,
-            left: 30,
-            child: Image.asset('assets/images/camera.png'),
-          ),
-
+          // Positioned(
+          //   top: 300,
+          //   left: 30,
+          //   child: Image.asset('assets/images/camera.png'),
+          // ),
         ],
       ),
     );
@@ -171,7 +162,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         keyboardType: TextInputType.name,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter your name';
+            return l10n.nameError;
           }
           return null;
         },
@@ -199,10 +190,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         keyboardType: TextInputType.emailAddress,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter your email';
+            return l10n.emailError;
           }
           if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-            return 'Please enter a valid email';
+            return l10n.emailValidation;
           }
           return null;
         },
@@ -242,11 +233,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         keyboardType: TextInputType.visiblePassword,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter password';
+            return l10n.passwordError;
           }
           final RegExp passwordRegExp = RegExp(r'^\d{8}$');
           if (!passwordRegExp.hasMatch(value)) {
-            return 'Password must be exactly 8 numbers';
+            return l10n.passwordValidation;
           }
           return null;
         },
@@ -262,12 +253,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // obscureText: !_isConfirmPasswordVisible,
         decoration: InputDecoration(
           filled: true,
-          labelText: 'Phone',
+          labelText: l10n.phoneNumber,
           labelStyle: const TextStyle(
             color: AppColors.textSecondary,
             fontWeight: FontWeight.bold,
           ),
-          
+
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(40),
             borderSide: BorderSide.none,
@@ -276,10 +267,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         keyboardType: TextInputType.number,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Enter your phone number';
+            return l10n.phoneNUmberEmpty;
           }
-          if(value.length != 11){
-            return 'Enter a valid phone number';
+          if (value.length != 11) {
+            return l10n.phoneNumberError;
           }
           return null;
         },
@@ -298,10 +289,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
-              minimumSize: const Size(
-                double.infinity,
-                55,
-              ),
+              minimumSize: const Size(double.infinity, 55),
             ),
             onPressed: isLoading ? null : _signUp,
             child: isLoading

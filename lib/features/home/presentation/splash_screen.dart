@@ -15,7 +15,9 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Scaffold(appBar: _buildAppBar(context), body: _buildBody(context, l10n));
+    return Scaffold(
+      appBar: _buildAppBar(context),
+      body: _buildBody(context, l10n));
   }
 
   AppBar _buildAppBar(BuildContext context) {
@@ -90,9 +92,9 @@ class SplashScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 12.0),
       child: Center(
         child: Text(
-          'Welcome to our shopping app. We make your shopping exerpiences ease and convinent.',
+          l10n.welcomeText,
           textAlign: TextAlign.center,
-          style: TextStyle(height: 2.5, fontSize: 14),
+          style: TextStyle(height: 2, fontSize: 14),
         ),
       ),
     );

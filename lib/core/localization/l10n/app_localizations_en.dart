@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'ShopEasy';
+  String get appName => 'IShop';
 
   @override
   String get home => 'Home';
@@ -51,7 +51,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get done => 'Done';
 
   @override
-  String get createAcc => 'Create \nAccount';
+  String get createAcc => 'Create Account';
 
   @override
   String get phoneNumber => 'Phone number';
@@ -163,6 +163,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signup => 'Sign Up';
+
+  @override
+  String get hello => 'Hello';
 
   @override
   String addedToCart(Object product) {
@@ -319,4 +322,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorFields => 'Please complete all address fields';
+
+  @override
+  String get nameError => 'Please enter your name';
+
+  @override
+  String get emailError => 'Please enter your email';
+
+  @override
+  String get passwordError => 'Please enter your password';
+
+  @override
+  String get emailValidation => 'Please enter a valid email';
+
+  @override
+  String get passwordValidation => 'Password must be exactly 8 numbers';
+
+  @override
+  String get welcomeText =>
+      'Welcome to our shopping app. We make your \n shopping experiences ease and convient';
+
+  @override
+  String get greetingText => 'Good to see you back!';
+
+  @override
+  String get confirmLogout => 'Confirm Logout';
+
+  @override
+  String get logoutText => 'Are you sure you want to log out?';
 }
