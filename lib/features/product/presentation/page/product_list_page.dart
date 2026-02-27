@@ -55,8 +55,8 @@ class ProductListPage extends StatelessWidget {
         ),
         const LanguageSelector(),
         IconButton(
-          onPressed: () => _showLogoutConfirm(context,l10n),
-          //context.read<AuthBloc>().add(LogoutRequested()),
+          onPressed: () => _showLogoutConfirm(context, l10n),
+
           icon: const Icon(Icons.logout),
         ),
       ],
@@ -104,8 +104,11 @@ class ProductListPage extends StatelessWidget {
     );
   }
 
-  Widget _buildsilverCategoryFilter(BuildContext context, ProductListState state){
-    if(state.categories.isEmpty){
+  Widget _buildsilverCategoryFilter(
+    BuildContext context,
+    ProductListState state,
+  ) {
+    if (state.categories.isEmpty) {
       return const SliverToBoxAdapter();
     }
     return SliverToBoxAdapter(
@@ -113,33 +116,36 @@ class ProductListPage extends StatelessWidget {
         height: 56,
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           itemCount: state.categories.length,
           separatorBuilder: (_, _) => const SizedBox(width: 8),
           itemBuilder: (context, index) {
             final category = state.categories[index];
 
-            final bool isSelected = (category == 'All' && state.selectedCategory == null) ||
-                                    (category == state.selectedCategory);
+            final bool isSelected =
+                (category == 'All' && state.selectedCategory == null) ||
+                (category == state.selectedCategory);
             return ChoiceChip(
               key: ValueKey(category),
-              label: Text(category), 
+              label: Text(category),
               selected: isSelected,
               onSelected: state.status == ProductListStatus.loading
-              ? null
-              : (selected) {
-                if(isSelected) return;
-                if(category == 'All'){
-                  context.read<ProductListBloc>()
-                  .add(ProductListFetched());
-                } else {
-                  context.read<ProductListBloc>()
-                  .add(FilterProductsByCategory(category));
-                }
-              },
+                  ? null
+                  : (selected) {
+                      if (isSelected) return;
+                      if (category == 'All') {
+                        context.read<ProductListBloc>().add(
+                          ProductListFetched(),
+                        );
+                      } else {
+                        context.read<ProductListBloc>().add(
+                          FilterProductsByCategory(category),
+                        );
+                      }
+                    },
             );
-          }
-        ,),
+          },
+        ),
       ),
     );
   }
@@ -320,15 +326,13 @@ class ProductListPage extends StatelessWidget {
   }
 }
 
-void _showLogoutConfirm(BuildContext context,AppLocalizations l10n) {
+void _showLogoutConfirm(BuildContext context, AppLocalizations l10n) {
   showDialog(
     context: context,
     builder: (dialogContext) {
       return AlertDialog(
         title: Text(l10n.confirmLogout),
-        content: Text(
-          l10n.logoutText,
-        ),
+        content: Text(l10n.logoutText),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
@@ -337,12 +341,9 @@ void _showLogoutConfirm(BuildContext context,AppLocalizations l10n) {
           TextButton(
             onPressed: () {
               context.read<AuthBloc>().add(LogoutRequested());
-             // Navigator.of(dialogContext).pop();
+              // Navigator.of(dialogContext).pop();
             },
-            child: Text(
-              l10n.logout,
-              style: TextStyle(color: AppColors.error),
-            ),
+            child: Text(l10n.logout, style: TextStyle(color: AppColors.error)),
           ),
         ],
       );

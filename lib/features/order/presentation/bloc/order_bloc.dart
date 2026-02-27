@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop_project/core/error/failures.dart';
 import 'package:shop_project/features/order/domain/entity/order_entity.dart';
 import 'package:shop_project/features/order/domain/usecases/add_order_items_use_case.dart';
 import 'package:shop_project/features/order/domain/usecases/create_order_use_case.dart';
@@ -46,18 +45,17 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
     await result.fold(
       (failure) async {
-        // emit(OrderFailure(failure.message)),
         emit(
           state.copyWith(
             status: OrderStatus.failure,
-            failure: DataNotFoundFailure('Failed to order!'),
+            failure: failure,
           ),
         );
       },
       (orderId) async {
-        try {
+
           await addOrderItems(orderId: orderId, items: event.items);
-          //emit(OrderPlacedSuccess(orderId));
+
           emit(
             state.copyWith(
               status: OrderStatus.success,
@@ -73,15 +71,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
               state.copyWith(status: OrderStatus.loaded, orders: orders),
             ),
           );
-          //emit(OrderPlacedSuccess(orderId));
-        } catch (e) {
-          emit(
-            state.copyWith(
-              status: OrderStatus.failure,
-              failure: UnknownFailure("Order created but failed to add items."),
-            ),
-          );
-        }
       },
     );
   }
@@ -96,7 +85,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       (failure) => emit(
         state.copyWith(
           status: OrderStatus.failure,
-          failure: DataNotFoundFailure("No orders found"),
+          failure: failure,
         ),
       ),
       (orders) =>
@@ -114,7 +103,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       (failure) => emit(
         state.copyWith(
           status: OrderStatus.failure,
-          failure: DataNotFoundFailure("Failed to load orders items"),
+          failure: failure,
         ),
       ),
       (items) =>
@@ -127,7 +116,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     Emitter<OrderState> emit,
   ) async {
     emit(state.copyWith(status: OrderStatus.loading, failure: null));
-    try {
+
       final result = await deleteOrder(event.orderId);
       result.fold(
         (failure) =>
@@ -140,13 +129,5 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
           );
         },
       );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: OrderStatus.failure,
-          failure: UnknownFailure('Failed to delete order'),
-        ),
-      );
-    }
   }
 }

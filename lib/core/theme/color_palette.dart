@@ -21,7 +21,6 @@ class AppColors {
 }
 
 extension ColorExtensions on BuildContext {
-  // Now these will change automatically when the theme flips!
   Color get primaryColor => Theme.of(this).colorScheme.primary;
   Color get secondaryColor => Theme.of(this).colorScheme.secondary;
   Color get backgroundColor => Theme.of(this).colorScheme.surface;

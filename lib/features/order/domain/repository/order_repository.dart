@@ -1,9 +1,10 @@
 import 'package:dartz/dartz.dart';
+import 'package:shop_project/core/base/repository.dart';
 import 'package:shop_project/core/error/failures.dart';
 import 'package:shop_project/features/order/domain/entity/order_entity.dart';
 import 'package:shop_project/features/order/domain/entity/order_item_entity.dart';
 
-abstract class OrderRepository {
+abstract class OrderRepository extends Repository{
   Future<Either<Failure, String>> createOrder({
     required double totalAmount,
     required String receiverName,

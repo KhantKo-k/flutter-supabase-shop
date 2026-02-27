@@ -19,13 +19,6 @@ class LanguageSelector extends StatelessWidget {
         children: [
           Icon(Icons.language, ),
           const SizedBox(width: 4),
-          // Text(
-          //   currentLocale.languageCode.toUpperCase(),
-          //   style: TextStyle(
-          //     color: AppColors.secondary,
-          //     fontWeight: FontWeight.w600,
-          //   ),
-          // ),
         ],
       ),
       itemBuilder: (context) => AppLocalizations.supportedLocales

@@ -1,5 +1,4 @@
 
-import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:shop_project/core/error/failures.dart';
@@ -8,9 +7,9 @@ import 'package:shop_project/features/order/data/model/order_item_model.dart';
 import 'package:shop_project/features/order/domain/entity/order_entity.dart';
 import 'package:shop_project/features/order/domain/entity/order_item_entity.dart';
 import 'package:shop_project/features/order/domain/repository/order_repository.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
-class OrderRepositoryImpl implements OrderRepository{
+
+class OrderRepositoryImpl extends OrderRepository{
   final OrderRemoteDatasource datasource;
 
   OrderRepositoryImpl(this.datasource);
@@ -24,25 +23,15 @@ class OrderRepositoryImpl implements OrderRepository{
     required String paymentMethod,
     String? description,
   }) async {
-    try{
-      final orderId = await datasource.createOrder(
-        totalAmount: totalAmount,
-        receiverName: receiverName,
-        receiverPhone: receiverPhone,
-        address: address,
+      return await on(() async => await datasource.createOrder(
+        totalAmount: totalAmount, 
+        receiverName: receiverName, 
+        receiverPhone: receiverPhone, 
+        address: address, 
         paymentMethod: paymentMethod,
-        description: description,
-      );
-      return Right(orderId);
-    } on AuthException{
-      return Left(AuthFailure(FailureMessages.invalidCredentials));
-    } on PostgrestException catch (e) {
-      return Left(SupabaseFailure(e.message));
-    } on SocketException{
-      return Left(NetworkFailure(FailureMessages.networkError));
-    } catch (_) {
-      return Left(UnknownFailure(FailureMessages.unexpectedError));
-    }
+        description: description
+        ));
+
   }
 
   @override
@@ -50,7 +39,6 @@ class OrderRepositoryImpl implements OrderRepository{
     required String orderId,
     required List<OrderItemEntity> items,
   }) async {
-    try{
       final models = items.map((e){
         return OrderItemModel(
           id: '', 
@@ -62,58 +50,30 @@ class OrderRepositoryImpl implements OrderRepository{
         );
       }).toList();
 
-      await datasource.insertOrderItems(orderId, models);
-      return Right(null);
-    }on PostgrestException catch (e) {
-      return Left(SupabaseFailure(e.message));
-    } on SocketException {
-      return Left(NetworkFailure(FailureMessages.networkError));
-    } catch (_) {
-      return Left(UnknownFailure(FailureMessages.unexpectedError));
-    }
+      return await on(() async => await datasource.insertOrderItems(orderId, models));
+
   }
 
   @override
   Future<Either<Failure, List<OrderEntity>>> getMyOrders() async {
-    try{
-      final orders = await datasource.getOrders();
-      if(orders.isEmpty){
-        return Left(DataNotFoundFailure());
-      }
-      return Right(orders);
-    } catch (_) {
-      return Left(UnknownFailure(FailureMessages.unexpectedError));
-    }
+
+    return await on(() async => await datasource.getOrders());
+
   }
 
   @override
   Future<Either<Failure, List<OrderItemEntity>>> getOrderItems(
     String orderId,
   ) async {
-    try{
-      final items = await datasource.getOrderItems(orderId);
-      if (items.isEmpty) {
-        return Left(DataNotFoundFailure());
-      }
-      return Right(items);
-    }catch (_) {
-      return Left(UnknownFailure(FailureMessages.unexpectedError));
-    }
+    return await on(() async => await datasource.getOrderItems(orderId));
+
   }
 
   @override
   Future<Either<Failure, void>> deleteOrder( 
     String orderId,
   ) async {
-    try{
-      await datasource.deleteOrder(orderId);
-      return Right(null);
-    }on PostgrestException catch (e) {
-      return Left(SupabaseFailure(e.message));
-    } on SocketException {
-      return Left(NetworkFailure(FailureMessages.networkError));
-    } catch (_) {
-      return Left(UnknownFailure(FailureMessages.unexpectedError));
-    }
+    return await on(() async => await datasource.deleteOrder(orderId));
+
   }
 }

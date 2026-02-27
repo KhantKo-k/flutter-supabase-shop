@@ -2,8 +2,6 @@
 import 'package:shop_project/features/auth/data/email/models/email_identity_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-
-
 abstract class EmailRemoteDatasource {
   Future<EmailIdentityModel> checkEmail(String email);
 }

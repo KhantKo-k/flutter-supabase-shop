@@ -114,11 +114,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
           ),
-          // Positioned(
-          //   top: 300,
-          //   left: 30,
-          //   child: Image.asset('assets/images/camera.png'),
-          // ),
+ 
         ],
       ),
     );

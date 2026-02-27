@@ -235,7 +235,7 @@ class _ProfilePageState extends State<ProfilePage> {
             case OrderStatus.loaded:
               return _buildOrderList(state.orders, l10n);
             case OrderStatus.failure:
-              return _buildErrorState(state.failure!.message);
+              return _buildErrorState(state.failure!.interpretation.message);
 
             case OrderStatus.success:
               return _buildOrderList(state.orders, l10n);
@@ -458,7 +458,7 @@ void _showOrderDetailSheet(BuildContext context, OrderEntity order, AppLocalizat
                       ),
                     );
                   case OrderStatus.failure:
-                    return Center(child: Text(state.failure!.message));
+                    return Center(child: Text(state.failure!.interpretation.message));
                 }
               },
             ),

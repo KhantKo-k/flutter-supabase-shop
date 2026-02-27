@@ -52,26 +52,30 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(l10n.productDetail), 
+            title: Text(l10n.productDetail),
             centerTitle: true,
             elevation: 0,
             actions: [
               BlocBuilder<CartBloc, CartState>(
                 builder: (context, state) {
-                  final int totalItems = state.items.fold(0, (sum, item) => sum + item.quantity);
+                  final int totalItems = state.items.fold(
+                    0,
+                    (sum, item) => sum + item.quantity,
+                  );
 
-                  if(totalItems == 0) {
-                     return const SizedBox.shrink();
+                  if (totalItems == 0) {
+                    return const SizedBox.shrink();
                   }
 
                   return Padding(
                     padding: const EdgeInsets.only(right: 16, top: 8),
                     child: Stack(
                       children: [
-                        IconButton(onPressed: (){
-                          _navigateToCart();
-                        }, 
-                        icon: Icon(Icons.shopping_cart_outlined),
+                        IconButton(
+                          onPressed: () {
+                            _navigateToCart();
+                          },
+                          icon: Icon(Icons.shopping_cart_outlined),
                         ),
                         Positioned(
                           right: 4,
@@ -84,21 +88,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             ),
                             constraints: const BoxConstraints(
                               minWidth: 18,
-                              minHeight: 18
+                              minHeight: 18,
                             ),
                             child: Text(
                               '$totalItems',
                               textAlign: TextAlign.center,
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   );
-
                 },
-              )
-            ],),
+              ),
+            ],
+          ),
           body: Stack(
             children: [
               SingleChildScrollView(
@@ -107,7 +111,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   children: [
                     _buildProductImage(widget.product.imageUrl, context),
                     _buildProductInfo(widget.product),
-                    _buildQuantitySelector(isInCart, _localQuantity, context, l10n),
+                    _buildQuantitySelector(
+                      isInCart,
+                      _localQuantity,
+                      context,
+                      l10n,
+                    ),
                     SizedBox(height: 100),
                   ],
                 ),
@@ -121,7 +130,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       _localQuantity,
                       context,
                       isLoading,
-                      l10n
+                      l10n,
                     ),
                 // : SizedBox.shrink(),
               ),
@@ -210,7 +219,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     bool isInCart,
     int quantity,
     BuildContext context,
-    AppLocalizations l10n
+    AppLocalizations l10n,
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -281,7 +290,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     int quantity,
     BuildContext context,
     bool isLoading,
-    AppLocalizations l10n
+    AppLocalizations l10n,
   ) {
     return Container(
       padding: const EdgeInsets.all(24),
@@ -337,12 +346,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                   ),
 
-                  if(isLoading)
-                  const SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: CircularProgressIndicator(strokeWidth: 3,),
-                  )
+                  if (isLoading)
+                    const SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(strokeWidth: 3),
+                    ),
                 ],
               ),
             ),
@@ -352,6 +361,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 }
-  void _navigateToCart() {
-    serviceLocator.get<AppRouter>().navigateToCart();
-  }
+
+void _navigateToCart() {
+  serviceLocator.get<AppRouter>().navigateToCart();
+}

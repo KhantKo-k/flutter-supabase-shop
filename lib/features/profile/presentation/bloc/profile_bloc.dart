@@ -28,7 +28,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final result = await getMyProfile();
 
     result.fold(
-      (failure) => emit(ProfileError(failure.message)),
+      (failure) => emit(ProfileError(failure.interpretation.message)),
       (profile) => emit(ProflileLoaded(profile)),
     );
   }
@@ -43,7 +43,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     await result.fold(
       (failure) {
-        emit(ProfileError(failure.message));
+        emit(ProfileError(failure.interpretation.message));
       },
       (profile) async {
         final currentIdentity = authLocalStorage.getIdentity();

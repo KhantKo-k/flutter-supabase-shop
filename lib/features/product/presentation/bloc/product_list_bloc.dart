@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop_project/core/error/failures.dart';
 import 'package:shop_project/features/product/domain/usecases/get_categories_usecase.dart';
 import 'package:shop_project/features/product/domain/usecases/get_product_use_case.dart';
 import 'package:shop_project/features/product/presentation/bloc/product_list_event.dart';
@@ -33,7 +32,7 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
       (failure) => emit(
         state.copyWith(
           status: ProductListStatus.failure,
-          failure: DataNotFoundFailure('Failed to load products'),
+          failure: failure,
         ),
       ),
       (products) => emit(

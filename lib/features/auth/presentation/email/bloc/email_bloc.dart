@@ -19,32 +19,18 @@ class EmailBloc extends Bloc<EmailEvent, EmailState> {
   ) async {
     emit(EmailLoading());
 
-    try {
-      final result = await checkEmailUseCase(event.email);
-      if (emit.isDone) return;
-      await result.fold(
-        (failure) async {
-          emit(EmailFailure(failure.message));
-        },
-        (profile) async {
-          await authLocalStorage.saveIdentity(profile);
-          if (!emit.isDone) {
-            emit(EmailSuccess(profile));
-          }
-        },
-      );
-    } catch (e) {
-      if (!emit.isDone) {
-        emit(EmailFailure(e.toString()));
-      }
-    }
-
-    // result.fold(
-    //   (failure) => emit(EmailFailure(failure.message)),
-    //   (profile) async {
-    //     await authLocalStorage.saveIdentity(profile);
-    //     emit(EmailSuccess(profile));
-    //   }
-    // );
+    final result = await checkEmailUseCase(event.email);
+    if (emit.isDone) return;
+    await result.fold(
+      (failure) async {
+        emit(EmailFailure(failure));
+      },
+      (profile) async {
+        await authLocalStorage.saveIdentity(profile);
+        if (!emit.isDone) {
+          emit(EmailSuccess(profile));
+        }
+      },
+    );
   }
 }

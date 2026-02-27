@@ -1,34 +1,103 @@
-abstract class Failure{
+
+import 'package:shop_project/core/error/exceptions.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+class Failure {
+  final AppException exception;
+
+  final FailureInterpretation interpretation;
+
+  Failure({required this.exception})
+    : interpretation = FailureInterpretationHelper().getInterpretation(
+        exception,
+      );
+}
+
+class FailureInterpretation {
+  final String title;
   final String message;
 
-  const Failure(this.message);
+  FailureInterpretation({required this.title, required this.message});
 }
 
-class ServerFailure extends Failure {
-  const ServerFailure(super.message);
-}
+class FailureInterpretationHelper {
+  FailureInterpretation getInterpretation(AppException exception) {
+    switch (exception) {
+      case BadRequestException():
+        return fromBadRequest(exception);
+      case UnauthorizedException():
+        return fromUnauthorized(exception);
+      case NotFoundException():
+        return fromNotFound(exception);
+      case InternalServerErrorException():
+        return fromInternalServerError(exception);
+      case ServiceUnavailableException():
+        return fromServiceUnavailable(exception);
+      case NetworkException():
+        return fromNetwork(exception);
+      default:
+        return fromUnexpected(exception);
+    }
+  }
 
-class AuthFailure extends Failure {
-  const AuthFailure(super.message);
-}
+  FailureInterpretation fromBadRequest(BadRequestException exception) {
+    return FailureInterpretation(
+      title: "Error",
+      message: exception.message ?? "Sorry, something went wrong.",
+    );
+  }
 
-class NetworkFailure extends Failure {
-  const NetworkFailure(super.message);
-}
 
-class UnknownFailure extends Failure {
-  const UnknownFailure(super.message);
-}
-class DataNotFoundFailure extends Failure {
-  const DataNotFoundFailure([String? message]) : super(message ?? 'Data not found');
-}
 
-class SupabaseFailure extends Failure {
-  const SupabaseFailure([String? message]) : super(message ?? 'Supabase operation failed');
-}
-class FailureMessages {
-  static const invalidCredentials = 'Invalid email or password';
-  static const userAlreadyExists = 'User already exists';
-  static const networkError = 'Please check your internet connection';
-  static const unexpectedError = 'Something went wrong. Please try again';
+  FailureInterpretation fromUnauthorized(UnauthorizedException exception) {
+    String displayMessage = "Please login to continue";
+    if(exception.exception is AuthException){
+      final supabaseError = exception.exception as AuthException;
+      displayMessage = supabaseError.message;
+    }
+    return FailureInterpretation(
+      title: "Unauthorized",
+      message: displayMessage,
+    );
+  }
+
+  FailureInterpretation fromNotFound(NotFoundException exception) {
+    return FailureInterpretation(
+      title: "Not Found",
+      message: "The requested resource was not found.",
+    );
+  }
+
+  FailureInterpretation fromInternalServerError(
+    InternalServerErrorException exception,
+  ) {
+    return FailureInterpretation(
+      title: "Error",
+      message: "Sorry, something went wrong.",
+    );
+  }
+
+  FailureInterpretation fromServiceUnavailable(
+    ServiceUnavailableException exception,
+  ) {
+    return FailureInterpretation(
+      title: "Error",
+      message:
+          "Sorry, our service is currently unavailable, please try again later.",
+    );
+  }
+
+  FailureInterpretation fromNetwork(NetworkException exception) {
+    return FailureInterpretation(
+      title: "Connection Error",
+      message: "Please check your internet connection and try again",
+    );
+  }
+
+  FailureInterpretation fromUnexpected(AppException exception) {
+    return FailureInterpretation(
+      title: "Error",
+      message: "Sorry, something went wrong.",
+    );
+  }
 }

@@ -14,17 +14,6 @@ abstract class AuthState extends Equatable {
 
 class AuthInitial extends AuthState {
   const AuthInitial({super.email, super.username, super.avatarUrl});
-
-  // factory AuthInitial.fromIdentity(EmailIdentity? identity){
-  //   if(identity == null){
-  //     return const AuthInitial();
-  //   }
-  //   return AuthInitial(
-  //     email: identity.email,
-  //     username: identity.username,
-  //     avatarUrl: identity.avatarUrl,
-  //   );
-  // }
 }
 
 class LoginLoading extends AuthState {

@@ -49,18 +49,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final currentAvatar = state.avatarUrl;
 
     if (currentEmail == null) return;
-    // String? currentEmail = state.email;
-    // String? currentUsername = state.username;
-    // String? currentAvatar = state.avatarUrl;
-
-    // if (currentEmail == null || currentEmail.isEmpty) {
-    //   final storedIdentity = authLocalStorage.getIdentity();
-    //   if (storedIdentity != null && storedIdentity.email.isNotEmpty) {
-    //     currentEmail = storedIdentity.email;
-    //     currentUsername = storedIdentity.username;
-    //     currentAvatar = storedIdentity.avatarUrl;
-    //   }
-    // }
 
     emit(
       LoginLoading(
@@ -75,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(
         AuthError(
-          failure.message,
+          failure.interpretation.message,
           email: currentEmail,
           username: currentUsername,
           avatarUrl: currentAvatar,
@@ -99,7 +87,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
 
     result.fold(
-      (failure) => emit(AuthError(failure.message)),
+      (failure) => emit(AuthError(failure.interpretation.message)),
       (_) => emit(SignUpSuccess()),
     );
   }
@@ -122,7 +110,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final result = await deleteUseCase();
 
       result.fold(
-        (failure) => emit(AuthError(failure.message)),
+        (failure) => emit(AuthError(failure.interpretation.message)),
         (_) => emit(const Unauthenticated()),
       );
     } catch (e) {

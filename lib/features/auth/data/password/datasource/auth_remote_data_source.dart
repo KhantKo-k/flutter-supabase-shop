@@ -1,4 +1,5 @@
 
+import 'package:shop_project/core/auth/auth_local_storage.dart';
 import 'package:shop_project/features/auth/data/password/models/user_auth_model.dart';
 import 'package:shop_project/features/auth/domain/password/entity/user_entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -12,8 +13,9 @@ abstract class AuthRemoteDataSource {
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   final SupabaseClient client;
+  final AuthLocalStorage local;
 
-  AuthRemoteDataSourceImpl(this.client);
+  AuthRemoteDataSourceImpl(this.client,this.local);
 
   @override
   Future<UserEntity> login(
@@ -27,10 +29,6 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       );
 
       final user = response.user;
-      // if (user == null) {
-      //   return left(const AuthFailure(FailureMessages.unexpectedError));
-      // }
-
       return UserAuthModel.fromSupabase(user!);
   }
 
@@ -49,10 +47,6 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
       final user = response.user;
 
-      // if (user == null) {
-      //   return left(const AuthFailure(FailureMessages.unexpectedError));
-      // }
-
       await client.from('profiles').insert({
         'id': user!.id,
         'email': user.email,
@@ -69,7 +63,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   @override
   Future<void> accountDeletion() async {
     final response = await client.functions.invoke('delete-user');
-
+    local.clearIdentity();
     if(response.status != 200){
       throw Exception('Failed to delete account: ${response.data}');
     }

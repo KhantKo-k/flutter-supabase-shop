@@ -38,7 +38,7 @@ class _CheckEmailPageState extends State<CheckEmailPage> {
         if (state is EmailFailure) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
+          ).showSnackBar(SnackBar(content: Text(state.failure.interpretation.message)));
           return;
         }
 

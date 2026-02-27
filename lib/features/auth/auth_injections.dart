@@ -11,7 +11,7 @@ import 'package:shop_project/features/auth/presentation/password/bloc/auth_bloc.
 
 void injectAuthRemoteDataSources(){
   serviceLocator.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(serviceLocator(),
+    () => AuthRemoteDataSourceImpl(serviceLocator(),serviceLocator()
     )
   );
 }

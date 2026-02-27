@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:shop_project/core/error/failures.dart';
 import 'package:shop_project/features/auth/domain/email/entity/email_identity.dart';
 
 abstract class EmailState extends Equatable{
@@ -22,11 +23,11 @@ class EmailSuccess extends EmailState{
 }
 
 class EmailFailure extends EmailState{
-  final String message;
+  final Failure failure;
 
-  const EmailFailure(this.message);
+  const EmailFailure(this.failure);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [failure];
 }
 
