@@ -54,6 +54,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 right: 0,
                 child: Image.asset('assets/images/bubble7.png'),
               ),
+              Positioned(
+                child: Text(
+                  "Feature 1"
+                ),
+              ),
               _buildProfileHeader(),
             ],
           ),
